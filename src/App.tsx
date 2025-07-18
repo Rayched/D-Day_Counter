@@ -47,7 +47,10 @@ function App() {
         {
           DayCounters.map((data) => {
             return (
-              <li>{data.DaysInfo} / {data.DiffDays} / {`${data.TargetDt}`}</li>
+              <li>
+                <div>{data.DaysInfo} / {data.DiffDays}</div>
+                <div>{`(기준 일: ${data.TargetDt})`}</div>
+              </li>
             );
           })
         }
