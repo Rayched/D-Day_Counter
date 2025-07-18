@@ -1,26 +1,59 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { useForm } from 'react-hook-form';
+import { I_Days, useDayCountStore } from './store';
+import { DatesConvert } from './DayCounters';
+
+export interface I_Forms {
+  TargetDt?: string;
+  DaysInfo?: string;
+};
+
+const Wrapper = styled.div`
+  width: 100vw;
+  height: 100vh;
+`;
+
+const InputForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 200px;
+`;
 
 function App() {
+  const {DayCounters, setDayCounters} = useDayCountStore();
+  const {register, handleSubmit, setValue} = useForm();
+
+  const onValid = ({TargetDt, DaysInfo}: I_Forms) => {
+    if(TargetDt === ""){
+      return;
+    } else {
+      const newDays = DatesConvert({TargetDt, DaysInfo}) as I_Days;
+      setDayCounters(newDays);
+    }
+    setValue("TargetDt", "");
+    setValue("DaysInfo", "");
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Wrapper>
+      <InputForm onSubmit={handleSubmit(onValid)}>
+        일정 내용: <input type='text' {...register("DaysInfo", {required: true})} />
+        기준 일: <input type='date' {...register("TargetDt", {required: true})}/>
+        <button>추가</button>
+      </InputForm>
+      <ul>
+        {
+          DayCounters.map((data) => {
+            return (
+              <li>{data.DaysInfo} / {data.DiffDays} / {`${data.TargetDt}`}</li>
+            );
+          })
+        }
+      </ul>
+    </Wrapper>
   );
-}
+};
 
 export default App;
