@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { I_Days, useDayCountStore } from './store';
-import { DatesConvert } from './DayCounters';
 import useDateConvert from './useDateConvert';
 
 export interface I_Forms {
@@ -13,6 +12,10 @@ export interface I_Forms {
 const Wrapper = styled.div`
   width: 100vw;
   height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 const InputForm = styled.form`
@@ -49,7 +52,7 @@ function App() {
           DayCounters.map((data) => {
             return (
               <li>
-                <span>{data.Titles} / {`(Id: ${data.Id}})`}</span>
+                <span>{data.Titles} / {`(Id: ${data.Id})`}</span>
                 <div>{data.DayInfos} {`(기준 일: ${data.TargetDt})`}</div>
               </li>
             );
