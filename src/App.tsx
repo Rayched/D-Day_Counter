@@ -3,10 +3,11 @@ import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { I_Days, useDayCountStore } from './store';
 import { DatesConvert } from './DayCounters';
+import useDateConvert from './useDateConvert';
 
 export interface I_Forms {
   TargetDt?: string;
-  DaysInfo?: string;
+  Titles?: string;
 };
 
 const Wrapper = styled.div`
@@ -22,24 +23,24 @@ const InputForm = styled.form`
 `;
 
 function App() {
-  const {DayCounters, setDayCounters} = useDayCountStore();
+  const {DayCounters} = useDayCountStore();
+  const {DateConverts} = useDateConvert();
   const {register, handleSubmit, setValue} = useForm();
 
-  const onValid = ({TargetDt, DaysInfo}: I_Forms) => {
-    if(TargetDt === ""){
+  const onValid = ({TargetDt, Titles}: I_Forms) => {
+    if(TargetDt === "" || Titles === ""){
       return;
     } else {
-      const newDays = DatesConvert({TargetDt, DaysInfo}) as I_Days;
-      setDayCounters(newDays);
+      DateConverts({TargetDt, Titles});
     }
     setValue("TargetDt", "");
-    setValue("DaysInfo", "");
-  }
+    setValue("Titles", "");
+  };
 
   return (
     <Wrapper>
       <InputForm onSubmit={handleSubmit(onValid)}>
-        일정 내용: <input type='text' {...register("DaysInfo", {required: true})} />
+        일정 내용: <input type='text' {...register("Titles", {required: true})} />
         기준 일: <input type='date' {...register("TargetDt", {required: true})}/>
         <button>추가</button>
       </InputForm>
@@ -48,8 +49,8 @@ function App() {
           DayCounters.map((data) => {
             return (
               <li>
-                <div>{data.DaysInfo} / {data.DiffDays}</div>
-                <div>{`(기준 일: ${data.TargetDt})`}</div>
+                <span>{data.Titles} / {`(Id: ${data.Id}})`}</span>
+                <div>{data.DayInfos} {`(기준 일: ${data.TargetDt})`}</div>
               </li>
             );
           })

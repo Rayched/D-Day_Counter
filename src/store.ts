@@ -2,9 +2,9 @@ import { create } from "zustand";
 
 export interface I_Days {
     Id?: string;
-    DaysInfo?: string;
+    Titles?: string;
     TargetDt?: string;
-    DiffDays: string;
+    DayInfos: string;
 };
 
 interface I_DayCountStore {

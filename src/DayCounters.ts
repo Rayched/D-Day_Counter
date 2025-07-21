@@ -1,26 +1,24 @@
 import { useState } from "react";
 import { I_Forms } from "./App";
-import { I_Days } from "./store";
+import { I_Days, useDayCountStore } from "./store";
 
-export function DatesConvert({TargetDt, DaysInfo}: I_Forms){    
+//사용자가 입력한 D-Day 정보를 store에 저장하는 DatesConvert 함수
+export function DatesConvert(){    
+    /*
     const Targets = new Date(String(TargetDt)).getTime();
     const Todays = new Date().getTime();
 
+    const {setDayCounters} = useDayCountStore();
+
     const Diffs = Math.floor((Targets - Todays) / (1000 * 60 * 60 * 24));
 
-    const DayInfos: I_Days = {
-        Id: `0000${TargetDt}`,
-        TargetDt: TargetDt,
+    const newDays: I_Days = {
+        Id: `${TargetDt}_${DaysInfo}`,
         DaysInfo: DaysInfo,
-        DiffDays: ""
+        TargetDt: TargetDt,
+        DiffDays: Diffs
     };
 
-    if(Diffs > 0){
-        DayInfos.DiffDays = `D-${Diffs}`;
-    } else if(Diffs === 0){
-        DayInfos.DiffDays = "D-Day";
-    } else {
-        DayInfos.DiffDays = `D+${Math.abs(Diffs)}`
-    }
-    return DayInfos
+    setDayCounters(newDays);
+    */
 };
