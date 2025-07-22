@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
-import { I_Days, useDayCountStore } from './store';
-import useDateConvert from './useDateConvert';
+import { useDateStore } from './store';
 
 export interface I_Forms {
   TargetDt?: string;
@@ -26,19 +25,20 @@ const InputForm = styled.form`
 `;
 
 function App() {
-  const {DayCounters} = useDayCountStore();
-  const {DateConverts} = useDateConvert();
   const {register, handleSubmit, setValue} = useForm();
+  const {AddDate, ConvertDates} = useDateStore();
 
   const onValid = ({TargetDt, Titles}: I_Forms) => {
     if(TargetDt === "" || Titles === ""){
       return;
     } else {
-      DateConverts({TargetDt, Titles});
+      AddDate({TargetDt, Titles});
     }
     setValue("TargetDt", "");
     setValue("Titles", "");
   };
+
+  const Outputs = ConvertDates();
 
   return (
     <Wrapper>
@@ -49,11 +49,11 @@ function App() {
       </InputForm>
       <ul>
         {
-          DayCounters.map((data) => {
+          Outputs.map((data) => {
             return (
               <li>
-                <span>{data.Titles} / {`(Id: ${data.Id})`}</span>
-                <div>{data.DayInfos} {`(기준 일: ${data.TargetDt})`}</div>
+                <span>{data.Titles} / {`(Id: ${data.DateId})`}</span>
+                <div>{data.DiffDays} {`(기준 일: ${data.TargetDt})`}</div>
               </li>
             );
           })
