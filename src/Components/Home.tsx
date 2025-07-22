@@ -50,6 +50,7 @@ function Home(){
                     <input 
                         type="text" 
                         placeholder="D-Day 내용 입력" 
+                        autoComplete="off"
                         {...register("DateText", {required: true})}
                     />
                     <button>추가</button>
@@ -57,7 +58,7 @@ function Home(){
             </Container>
             {
                 Hide ? null : (
-                    <AddItemWrapper onClick={() => setHide(true)}>
+                    <AddItemWrapper>
                         <AddDayItems DateText={Title} />
                     </AddItemWrapper>
                 )
