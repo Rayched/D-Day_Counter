@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { useDateStore } from './store';
+import Home from './Components/Home';
 
 export interface I_Forms {
   TargetDt?: string;
@@ -13,8 +14,16 @@ const Wrapper = styled.div`
   height: 100vh;
   display: flex;
   flex-direction: column;
+  align-items: center;
+`;
+
+const Titles = styled.header`
+  width: 100%;
+  padding: 5px 0px;
+  display: flex;
   justify-content: center;
   align-items: center;
+  font-weight: bold;
 `;
 
 const InputForm = styled.form`
@@ -42,7 +51,16 @@ function App() {
 
   return (
     <Wrapper>
-      <InputForm onSubmit={handleSubmit(onValid)}>
+      <Titles>D-Day 카운터</Titles>
+      <Home />
+    </Wrapper>
+  );
+};
+
+export default App;
+
+/**
+ * <InputForm onSubmit={handleSubmit(onValid)}>
         일정 내용: <input type='text' {...register("Titles", {required: true})} />
         기준 일: <input type='date' {...register("TargetDt", {required: true})}/>
         <button>추가</button>
@@ -59,8 +77,4 @@ function App() {
           })
         }
       </ul>
-    </Wrapper>
-  );
-};
-
-export default App;
+ */
