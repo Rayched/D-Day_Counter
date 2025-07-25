@@ -1,13 +1,5 @@
-import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useForm } from 'react-hook-form';
-import { useDateStore } from './store';
 import Home from './Components/Home';
-
-export interface I_Forms {
-  TargetDt?: string;
-  Titles?: string;
-};
 
 const Wrapper = styled.div`
   width: 100vw;
@@ -26,29 +18,7 @@ const Titles = styled.header`
   font-weight: bold;
 `;
 
-const InputForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 200px;
-`;
-
 function App() {
-  const {register, handleSubmit, setValue} = useForm();
-  const {AddDate, ConvertDates} = useDateStore();
-
-  const onValid = ({TargetDt, Titles}: I_Forms) => {
-    if(TargetDt === "" || Titles === ""){
-      return;
-    } else {
-      AddDate({TargetDt, Titles});
-    }
-    setValue("TargetDt", "");
-    setValue("Titles", "");
-  };
-
-  const Outputs = ConvertDates();
-
   return (
     <Wrapper>
       <Titles>D-Day 카운터</Titles>

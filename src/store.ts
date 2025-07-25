@@ -1,10 +1,11 @@
 import { create } from "zustand";
-import { I_Forms } from "./App";
+import { I_Forms } from "./Components/AddDateForms";
 
 export interface I_DateInfos {
     Id?: string;
     DayText?: string;
     TargetDate?: string;
+    isStartEdits?: boolean;
 };
 
 interface I_ConvertDates {
@@ -33,7 +34,8 @@ export const useDateStore = create<I_DateStore>((set, get) => ({
         const newValue: I_DateInfos = {
             Id: AddNewId,
             TargetDate: NewValue.TargetDt,
-            DayText: NewValue.Titles
+            DayText: NewValue.Titles,
+            isStartEdits: NewValue.IsStartEdit
         };
         
         return {
@@ -46,7 +48,7 @@ export const useDateStore = create<I_DateStore>((set, get) => ({
         const originData = get().DateInfos;
         const TodayDate = new Date().getTime();
 
-        const DateConvert = originData.map(({TargetDate, DayText, Id}) => {
+        const DateConvert = originData.map(({TargetDate, DayText, Id, isStartEdits}) => {
             const NewValues: I_ConvertDates = {
                 DateId: Id,
                 Titles: DayText,
@@ -56,16 +58,18 @@ export const useDateStore = create<I_DateStore>((set, get) => ({
 
             const getTargets = new Date(String(TargetDate)).getTime();
 
-            const Diffs = Math.floor(
-                (getTargets - TodayDate) / (1000 * 60 * 60 *24)
-            );
+            const DayToMillies = 1000 * 60 * 60 * 24;
+
+            const Diffs = Math.floor((getTargets - TodayDate) / DayToMillies);
 
             if(Diffs === 0){
                 NewValues.DiffDays = "D-Day";
-            } else if(Diffs > 0){
-                NewValues.DiffDays = `D-${Diffs + 1}`;
             } else {
-                NewValues.DiffDays = `D+${Math.abs(Diffs) + 1}`;
+                if(!isStartEdits){
+                    NewValues.DiffDays = (Diffs > 0) ? `D-${Diffs}` : `D+${Math.abs(Diffs)}`;
+                } else {
+                    NewValues.DiffDays = (Diffs > 0) ? `D-${Diffs + 1}` : `D+${Math.abs(Diffs)+1}`;
+                }
             };
 
             return NewValues;
@@ -73,4 +77,15 @@ export const useDateStore = create<I_DateStore>((set, get) => ({
 
         return DateConvert;
     }
+}));
+
+interface I_AddModeStore {
+    isAdds: boolean;
+    setAdds: (change: boolean) => void;
+};
+
+//D-Day 추가 모드 여부 확인용 Store
+export const useAddModeStore = create<I_AddModeStore>((set) => ({
+    isAdds: false,
+    setAdds: (changes) => set({isAdds: changes})
 }));
