@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import AddDateItems from "./AddDateForms";
-import { useAddModeStore, useDateStore } from "../store";
-import { useStore } from "zustand";
+import { useAddModeStore } from "../store";
+import Counters from "./Counters";
 
 interface I_InputForm {
     DateText?: string;
@@ -12,6 +12,7 @@ interface I_InputForm {
 const Container = styled.div`
     width: 100vw;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 `;
@@ -34,20 +35,6 @@ function Home(){
     const {register, setValue, handleSubmit} = useForm();
     const {isAdds, setAdds} = useAddModeStore();
 
-    /*
-    * 이전 방식 (부족한 지식 선에서 생각난 방식)
-    const {ConvertDates} = useDateStore();
-    const DateOutputs = ConvertDates();
-    */
-
-    //Solution 1
-    // 'const DateOutputs = useTestStore((state) => state.selector)'
-
-    //Solution 2
-    // 'const DateOutputs = useStore(useTestStore, selector)'
-
-    const {ConvertDates} = useDateStore();
-
     const onValid = ({DateText}: I_InputForm) => {
         if(DateText === ""){
             return;
@@ -58,8 +45,6 @@ function Home(){
 
         setValue("DateText", "");
     };
-
-    useEffect(() => console.log(ConvertDates()), [isAdds]);
 
     return (
         <>
@@ -73,6 +58,7 @@ function Home(){
                     />
                     <button>추가</button>
                 </InputForm>
+                <Counters />
             </Container>
             {
                 isAdds ? (

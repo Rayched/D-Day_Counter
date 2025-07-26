@@ -8,7 +8,7 @@ export interface I_DateInfos {
     isStartEdits?: boolean;
 };
 
-interface I_ConvertDates {
+interface I_DateSelector {
     DateId?: string;
     Titles?: string;
     TargetDt?: string;
@@ -20,7 +20,7 @@ interface I_DateStore {
     AddDate: (NewValue: I_Forms) => void;
     //UpdateDays: (Targets: I_DateInfos) => void;
     //DeleteDays: (TargetId?: string) => void;
-    ConvertDates: () => I_ConvertDates[];
+    DateSelector: () => I_DateSelector[];
 };
 
 //사용자가 추가한 D-Day 정보, localStorage 저장하는 Store
@@ -44,12 +44,12 @@ export const useDateStore = create<I_DateStore>((set, get) => ({
     }),
 
     //DateInfos 가공, 출력 (Selector)
-    ConvertDates: () => {
+    DateSelector: () => {
         const originData = get().DateInfos;
         const TodayDate = new Date().getTime();
 
         const DateConvert = originData.map(({TargetDate, DayText, Id, isStartEdits}) => {
-            const NewValues: I_ConvertDates = {
+            const NewValues: I_DateSelector= {
                 DateId: Id,
                 Titles: DayText,
                 TargetDt: TargetDate,
