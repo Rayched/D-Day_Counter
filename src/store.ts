@@ -19,7 +19,7 @@ interface I_DateStore {
     DateInfos: I_DateInfos[];
     AddDate: (NewValue: I_Forms) => void;
     //UpdateDays: (Targets: I_DateInfos) => void;
-    //DeleteDays: (TargetId?: string) => void;
+    DeleteDays: (TargetId: string) => void;
     DateSelector: () => I_DateSelector[];
 };
 
@@ -41,6 +41,36 @@ export const useDateStore = create<I_DateStore>((set, get) => ({
         return {
             DateInfos: [...prev.DateInfos, newValue]
         };
+    }),
+
+    //D-Day 삭제 Action
+    DeleteDays: (TargetId) => set((s) => {
+        const Confirms = window.confirm(`D-Day를 삭제 하겠습니까?`);
+
+        if(Confirms){
+            const originData = get().DateInfos;
+            const Idx = originData.findIndex((data) => data.Id === TargetId);
+
+            if(Idx === -1){
+                alert(`'D-Day Id: ${TargetId}'를 찾을 수 없습니다.`);
+                return {
+                    DateInfos: s.DateInfos
+                };
+            } else {
+                alert("D-Day를 삭제했습니다.");
+                return {
+                    DateInfos: [
+                        ...originData.slice(0, Idx),
+                        ...originData.slice(Idx + 1)
+                    ]
+                };
+            }
+        } else {
+            alert("D-Day 삭제를 취소했습니다.");
+            return {
+                DateInfos: s.DateInfos
+            };
+        }
     }),
 
     //DateInfos 가공, 출력 (Selector)

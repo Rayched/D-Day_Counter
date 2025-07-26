@@ -35,7 +35,7 @@ function Counters(){
     * Solution 2
     - 'const DateOutputs = useStore(useTestStore, selector)'
     */
-    const {DateSelector} = useDateStore();
+    const {DateSelector, DeleteDays} = useDateStore();
 
     return (
         <Container>
@@ -45,6 +45,8 @@ function Counters(){
                         <CounterItems key={data.DateId}>
                             <CounterInfos>{data.DiffDays} {data.Titles}</CounterInfos>
                             <DateInfos>(~ {data.TargetDt})</DateInfos>
+                            <button>수정</button>
+                            <button onClick={() => DeleteDays(String(data.DateId))}>삭제</button>
                         </CounterItems>
                     );
                 })
