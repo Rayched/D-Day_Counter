@@ -1,7 +1,8 @@
 //D-Day Item Components
 
 import styled from "styled-components";
-import { useDateStore } from "../store";
+import { EditModeStore, useDateStore } from "../store";
+import { useStore } from "zustand";
 
 const Container = styled.div`
     display: flex;
@@ -23,19 +24,8 @@ const CounterInfos = styled.div``;
 const DateInfos = styled.div``;
 
 function Counters(){
-    /*
-    * 이전 방식 (부족한 지식 선에서 생각난 방식)
-    const {ConvertDates} = useDateStore();
-    const DateOutputs = ConvertDates();
-    
-
-    * Solution 1
-    - 'const DateOutputs = useTestStore((state) => state.selector)'
-
-    * Solution 2
-    - 'const DateOutputs = useStore(useTestStore, selector)'
-    */
     const {DateSelector, DeleteDays} = useDateStore();
+    const {setEdits} = EditModeStore();
 
     return (
         <Container>
@@ -45,7 +35,7 @@ function Counters(){
                         <CounterItems key={data.DateId}>
                             <CounterInfos>{data.DiffDays} {data.Titles}</CounterInfos>
                             <DateInfos>(~ {data.TargetDt})</DateInfos>
-                            <button>수정</button>
+                            <button onClick={() => setEdits(true)}>수정</button>
                             <button onClick={() => DeleteDays(String(data.DateId))}>삭제</button>
                         </CounterItems>
                     );

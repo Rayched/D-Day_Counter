@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import {useAddModeStore, useDateStore } from "../store";
-import { useStore } from "zustand";
+import BasedForm from "./BasedForm";
 
 export interface I_Forms {
   TargetDt?: string;
@@ -15,22 +15,6 @@ interface I_InputForms {
     targetDt?: string;
     StartEdit?: boolean;
 };
-
-const Container = styled.div`
-    width: 300px;
-    height: 500px;
-    border-radius: 15px;
-    background-color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    .FormTitle {
-        font-weight: bold;
-        padding: 5px 0px;
-        margin: 5px 0px;
-    };
-`;
 
 const InputForm = styled.form`
     display: flex;
@@ -64,9 +48,7 @@ export default function AddDateForms({Titles}: I_Forms){
     };
 
     return (
-        <Container>
-            <h4 className="FormTitle">D - Day 추가</h4>
-            <button onClick={() => setAdds(false)}>취소</button>
+        <BasedForm>
             <InputForm onSubmit={handleSubmit(onValid)}>
                 <InputBox>
                     <label>내용</label>
@@ -82,6 +64,6 @@ export default function AddDateForms({Titles}: I_Forms){
                 </InputBox>
                 <button>추가</button>
             </InputForm>
-        </Container>
+        </BasedForm>
     );
 }

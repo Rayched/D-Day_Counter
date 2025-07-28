@@ -18,7 +18,7 @@ interface I_DateSelector {
 interface I_DateStore {
     DateInfos: I_DateInfos[];
     AddDate: (NewValue: I_Forms) => void;
-    //UpdateDays: (Targets: I_DateInfos) => void;
+    EditDate: (TargetId: string) => void;
     DeleteDays: (TargetId: string) => void;
     DateSelector: () => I_DateSelector[];
 };
@@ -72,6 +72,7 @@ export const useDateStore = create<I_DateStore>((set, get) => ({
             };
         }
     }),
+    EditDate: () => {},
 
     //DateInfos 가공, 출력 (Selector)
     DateSelector: () => {
@@ -119,3 +120,13 @@ export const useAddModeStore = create<I_AddModeStore>((set) => ({
     isAdds: false,
     setAdds: (changes) => set({isAdds: changes})
 }));
+
+interface I_EditModeStore {
+    isEdits: boolean;
+    setEdits: (value: boolean) => void;
+};
+
+export const EditModeStore = create<I_EditModeStore>((set) => ({
+    isEdits: false,
+    setEdits: (value) => set({isEdits: value})
+}))

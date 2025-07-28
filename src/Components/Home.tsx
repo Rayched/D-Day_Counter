@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import AddDateItems from "./AddDateForms";
-import { useAddModeStore } from "../store";
+import { EditModeStore, useAddModeStore } from "../store";
 import Counters from "./Counters";
+import { useStore } from "zustand";
+import EditForms from "./EditForms";
 
 interface I_InputForm {
     DateText?: string;
@@ -35,6 +37,8 @@ function Home(){
     const {register, setValue, handleSubmit} = useForm();
     const {isAdds, setAdds} = useAddModeStore();
 
+    const EditMode = useStore(EditModeStore, (state) => state.isEdits);
+
     const onValid = ({DateText}: I_InputForm) => {
         if(DateText === ""){
             return;
@@ -60,13 +64,8 @@ function Home(){
                 </InputForm>
                 <Counters />
             </Container>
-            {
-                isAdds ? (
-                    <AddItemWrapper>
-                        <AddDateItems Titles={Title} />
-                    </AddItemWrapper>
-                ): null
-            }
+            { isAdds ? <AddDateItems Titles={Title} /> : null }
+            { EditMode ? <EditForms /> : null}
         </>
     );
 };
