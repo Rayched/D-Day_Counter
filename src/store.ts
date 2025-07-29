@@ -8,7 +8,7 @@ export interface I_DateInfos {
     isStartEdits?: boolean;
 };
 
-interface I_DateSelector {
+export interface I_DateSelector {
     DateId?: string;
     Titles?: string;
     TargetDt?: string;
@@ -18,9 +18,21 @@ interface I_DateSelector {
 interface I_DateStore {
     DateInfos: I_DateInfos[];
     AddDate: (NewValue: I_Forms) => void;
-    EditDate: (TargetId: string) => void;
+    EditDate: (TargetId: string, newValue: I_DateInfos) => void;
     DeleteDays: (TargetId: string) => void;
     DateSelector: () => I_DateSelector[];
+};
+
+interface I_AddModeStore {
+    isAdds: boolean;
+    setAdds: (change: boolean) => void;
+};
+
+interface I_EditModeStore {
+    isEdits: boolean;
+    targetData: I_DateSelector;
+    setEdits: (value: boolean) => void;
+    setData: (targets: I_DateSelector) => void;
 };
 
 //사용자가 추가한 D-Day 정보, localStorage 저장하는 Store
@@ -72,7 +84,26 @@ export const useDateStore = create<I_DateStore>((set, get) => ({
             };
         }
     }),
-    EditDate: () => {},
+
+    //D-Day 수정 Action
+    EditDate: (TargetId, newValue) => set((prev) => {
+        const origins = prev.DateInfos;
+        const TargetIdx = origins.findIndex((data) => data.Id === TargetId);
+
+        if(TargetIdx === -1){
+            return {
+                DateInfos: prev.DateInfos
+            };
+        } else {
+            return {
+                DateInfos: [
+                    ...origins.slice(0, TargetIdx),
+                    newValue,
+                    ...origins.slice(TargetIdx + 1)
+                ]
+            }
+        }
+    }),
 
     //DateInfos 가공, 출력 (Selector)
     DateSelector: () => {
@@ -110,23 +141,19 @@ export const useDateStore = create<I_DateStore>((set, get) => ({
     }
 }));
 
-interface I_AddModeStore {
-    isAdds: boolean;
-    setAdds: (change: boolean) => void;
-};
-
 //D-Day 추가 모드 여부 확인용 Store
 export const useAddModeStore = create<I_AddModeStore>((set) => ({
     isAdds: false,
     setAdds: (changes) => set({isAdds: changes})
 }));
 
-interface I_EditModeStore {
-    isEdits: boolean;
-    setEdits: (value: boolean) => void;
-};
-
 export const EditModeStore = create<I_EditModeStore>((set) => ({
     isEdits: false,
-    setEdits: (value) => set({isEdits: value})
+    targetData: {
+        DateId: "",
+        Titles: "",
+        TargetDt: ""
+    },
+    setEdits: (value) => set({isEdits: value}),
+    setData: (targets) => set({targetData: targets})
 }))
