@@ -39,7 +39,12 @@ function Counters(){
                     return (
                         <CounterItems key={data.DateId}>
                             <CounterInfos>{data.DiffDays} {data.Titles}</CounterInfos>
-                            <DateInfos>(~ {data.TargetDt})</DateInfos>
+                            <DateInfos>
+                                {
+                                    data.DiffDays?.includes("-") ? `( ~ ${data.TargetDt})` 
+                                    : `(${data.TargetDt} ~ )`
+                                }
+                            </DateInfos>
                             <button onClick={() => onEdits(data)}>수정</button>
                             <button onClick={() => DeleteDays(String(data.DateId))}>삭제</button>
                         </CounterItems>
