@@ -1,7 +1,7 @@
 //D-Day Item Components
 
 import styled from "styled-components";
-import { EditModeStore, I_DateSelector, useDateStore } from "../store";
+import { DateStore, I_DateSelector, InputFormStore} from "../store";
 import { useStore } from "zustand";
 
 const Container = styled.div`
@@ -24,12 +24,11 @@ const CounterInfos = styled.div``;
 const DateInfos = styled.div``;
 
 function Counters(){
-    const {DateSelector, DeleteDays} = useDateStore();
-    const {setEdits, setData} = EditModeStore();
+    const {DateSelector, DeleteDays} = DateStore();
+    const {InputStart} = useStore(InputFormStore);
 
     const onEdits = (targetData: I_DateSelector) => {
-        setData(targetData);
-        setEdits(true);
+        InputStart("EditMode");
     };
 
     return (

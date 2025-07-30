@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { I_Forms } from "./Components/AddDateForms";
+import { I_Forms } from "./Components/AddForms";
 import {persist} from "zustand/middleware";
 
 export interface I_DateInfos {
@@ -24,20 +24,20 @@ interface I_DateStore {
     DateSelector: () => I_DateSelector[];
 };
 
-interface I_AddModeStore {
-    isAdds: boolean;
-    setAdds: (change: boolean) => void;
+interface I_EditStore {
+    Targets: I_DateSelector;
+    setTargets: (value: I_DateSelector) => void;
 };
 
-interface I_EditModeStore {
-    isEdits: boolean;
-    targetData: I_DateSelector;
-    setEdits: (value: boolean) => void;
-    setData: (targets: I_DateSelector) => void;
+interface I_InputFormStore {
+    isDisplay: boolean;
+    Modes: string;
+    InputStart: (ModeNm: string) => void;
+    InputDone: () => void;
 };
 
 //사용자가 추가한 D-Day 정보, localStorage 저장하는 Store
-export const useDateStore = create<I_DateStore>()(
+export const DateStore = create<I_DateStore>()(
     persist(
         (set, get) => ({
             DateInfos: [],
@@ -149,19 +149,18 @@ export const useDateStore = create<I_DateStore>()(
     )
 );
 
-//D-Day 추가 모드 여부 확인용 Store
-export const useAddModeStore = create<I_AddModeStore>((set) => ({
-    isAdds: false,
-    setAdds: (changes) => set({isAdds: changes})
+export const InputFormStore = create<I_InputFormStore>((set) => ({
+    isDisplay: false,
+    Modes: "",
+    InputStart: (ModeNm: string) => set({isDisplay: true, Modes: ModeNm}),
+    InputDone: () => set({isDisplay: false, Modes: ""})
 }));
 
-export const EditModeStore = create<I_EditModeStore>((set) => ({
-    isEdits: false,
-    targetData: {
+export const EditStore = create<I_EditStore>((set) => ({
+    Targets: {
         DateId: "",
         Titles: "",
         TargetDt: ""
     },
-    setEdits: (value) => set({isEdits: value}),
-    setData: (targets) => set({targetData: targets})
-}))
+    setTargets: (value) => set({Targets: value})
+}));

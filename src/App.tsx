@@ -7,21 +7,23 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  font-family: "Noto-Sans", "Noto-Sans-KR";
 `;
 
 const Titles = styled.header`
   width: 100%;
+  height: 8%;
   padding: 5px 0px;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-weight: bold;
+  font-size: 25px;
 `;
 
 function App() {
   return (
     <Wrapper>
-      <Titles>D-Day 카운터</Titles>
+      <Titles>디데이 카운터</Titles>
       <Home />
     </Wrapper>
   );

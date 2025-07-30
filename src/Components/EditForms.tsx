@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import BasedForm from "./BasedForm";
+import BasedForm, { CancelBtn, FormBtn, FormBtnsBox, InputForms, InputsBox } from "./BasedForm";
 import { useForm } from "react-hook-form";
-import { EditModeStore, I_DateInfos, useDateStore } from "../store";
-import { InferencePriority } from "typescript";
+import { DateStore, EditStore, I_DateInfos, InputFormStore} from "../store";
+import { useStore } from "zustand";
 
 interface I_Forms {
     titles?: string;
@@ -10,23 +10,16 @@ interface I_Forms {
     StartEdit?: boolean;
 };
 
-const InputForms = styled.form`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-`;
-
-const InputBox = styled.div``;
-
 export default function EditForms(){
     const {register, setValue, handleSubmit} = useForm();
 
-    const {EditDate} = useDateStore();
-    const {targetData, setData, setEdits} = EditModeStore();
+    const {EditDate} = DateStore();
+    const {InputDone} = useStore(InputFormStore);
+    const {Targets, setTargets} = useStore(EditStore);
+    //const {targetData, setData, setEdits} = EditModeStore();
 
     const onValid = ({titles, targetDt, StartEdit}: I_Forms) => {
-        if(titles === targetData.Titles && targetDt === targetData.TargetDt){
+        if(titles === Targets.Titles && targetDt === Targets.TargetDt){
             alert("D-Day 데이터가 수정되지 않았습니다.");   
         } else {
             const newValues: I_DateInfos = {
@@ -35,28 +28,31 @@ export default function EditForms(){
                 isStartEdits: StartEdit,
                 DayText: titles
             };
-            EditDate(String(targetData.DateId), newValues);
+            EditDate(String(Targets.DateId), newValues);
         };
-        setData({});
-        setEdits(false);
+        setTargets({});
+        InputDone();
     };
 
     return (
-        <BasedForm>
+        <BasedForm Titles="수정">
             <InputForms onSubmit={handleSubmit(onValid)}>
-                <InputBox>
+                <InputsBox>
                     <label>내용</label>
-                    <input type="text" defaultValue={targetData.Titles} {...register("titles", {required: true})} />
-                </InputBox>
-                <InputBox>
+                    <input type="text" defaultValue={Targets.Titles} {...register("titles", {required: true})} />
+                </InputsBox>
+                <InputsBox>
                     <label>목표일</label>
-                    <input type="date" defaultValue={targetData.TargetDt} {...register("targetDt", {required: true})} />
-                </InputBox>
-                <InputBox>
+                    <input type="date" defaultValue={Targets.TargetDt} {...register("targetDt", {required: true})} />
+                </InputsBox>
+                <InputsBox>
                     <input type="checkbox" {...register("StartEdit")} />
                     <label>설정일로부터 1일</label>
-                </InputBox>
-                <button>수정</button>
+                </InputsBox>
+                <FormBtnsBox>
+                    <FormBtn>수정</FormBtn>
+                    <CancelBtn />
+                </FormBtnsBox>
             </InputForms>
         </BasedForm>
     );
