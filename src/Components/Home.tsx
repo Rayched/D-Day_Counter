@@ -46,7 +46,7 @@ const InputForm = styled.input<{isInputs: boolean}>`
     };
 `;
 
-const Btns = styled.button`
+const InputBtn = styled.button`
     width: 45px;
     height: 25px;
     border: 2px solid black;
@@ -57,8 +57,23 @@ const Btns = styled.button`
     font-weight: bold;
 `;
 
+const ControlBtnBox = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 3px 0px;
+`;
+
+const ControlBtn = styled.button`
+    width: 90px;
+    border: 2px solid black;
+    border-radius: 10px;
+    margin: 5px 3px;
+`;
+
 function Home(){
     const [Title, setTitle] = useState("");
+    const [Show, setShow] = useState(false);
 
     const {register, setValue, handleSubmit, watch} = useForm();
     const {isDisplay, Modes, InputStart} = useStore(InputFormStore);
@@ -98,9 +113,13 @@ function Home(){
                         isInputs={isInputs}
                         {...register("DateText", {required: true})}
                     />
-                    {isInputs ? <Btns>추가</Btns> : null}
+                    {isInputs ? <InputBtn>추가</InputBtn> : null}
                 </FormBox>
-                <Counters />
+                <ControlBtnBox>
+                    <ControlBtn onClick={() => setShow(true)} disabled={Show}>D-Day 편집</ControlBtn>
+                    {Show ? <ControlBtn onClick={() => setShow(false)}>편집 취소</ControlBtn> : null}
+                </ControlBtnBox>
+                <Counters Show={Show} setShow={setShow}/>
             </Container>
             { 
                 isDisplay && Modes === "AddMode" ? <AddDateItems Titles={Title} /> : null 

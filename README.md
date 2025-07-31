@@ -18,4 +18,6 @@
 
 - **[테스트 영상](https://youtu.be/SAcySLegbBo?si=6RlJKnSc7bzK9Vjp)**
 
+- **`2025.07.31` Update**
+    - 디데이 카운터 CSS Style 일부 적용
 ---

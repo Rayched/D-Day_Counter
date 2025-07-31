@@ -11,12 +11,11 @@ interface I_Forms {
 };
 
 export default function EditForms(){
-    const {register, setValue, handleSubmit} = useForm();
+    const {register, handleSubmit} = useForm();
 
     const {EditDate} = DateStore();
     const {InputDone} = useStore(InputFormStore);
     const {Targets, setTargets} = useStore(EditStore);
-    //const {targetData, setData, setEdits} = EditModeStore();
 
     const onValid = ({titles, targetDt, StartEdit}: I_Forms) => {
         if(titles === Targets.Titles && targetDt === Targets.TargetDt){
