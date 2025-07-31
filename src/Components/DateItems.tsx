@@ -5,7 +5,7 @@ import { DateStore, EditStore, I_DateSelector, InputFormStore} from "../store";
 import { useStore } from "zustand";
 import { useState } from "react";
 
-interface I_Counters {
+interface I_DateItems {
     Show: boolean;
     setShow: Function;
 };
@@ -19,7 +19,11 @@ const Container = styled.div`
 `;
 
 const CounterItems = styled.div`
-    height: 56px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 60px;
     border: 2px solid black;
     border-radius: 15px;
     padding: 5px;
@@ -29,17 +33,40 @@ const CounterItems = styled.div`
     background-color: rgb(87, 96, 111);
 `;
 
-const CounterInfos = styled.div``;
-const DateInfos = styled.div``;
-
-const DateItemBtns = styled.div<{isShows: boolean}>`
-    display: ${(props) => props.isShows ? "flex" : "none"};
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
+const DateInfos = styled.div`
+    width: 100%;
+    padding: 3px;
+    display: flex;
+    justify-content: flex-start;
 `;
 
-function Counters(props: I_Counters){
+const DateItemBtnBox = styled.div<{isShows: boolean}>`
+    display: ${(props) => props.isShows ? "flex" : "none"};
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+
+    .EditBtn {
+        background-color: rgb(77, 145, 77);
+    };
+
+    .DeleteBtn {
+        background-color: rgb(255, 100, 100);
+    };
+
+    width: 100%;
+`;
+
+const DateItemBtn = styled.button`
+    width: 50px;
+    margin: 0px 3px;
+    border: 1px solid white;
+    border-radius: 10px;
+    font-weight: bold;
+    color: white;
+`;
+
+function DateItems(props: I_DateItems){
     const {DateSelector, DeleteDays} = DateStore();
     const {InputStart} = useStore(InputFormStore);
     const {setTargets} = useStore(EditStore);
@@ -61,14 +88,14 @@ function Counters(props: I_Counters){
                 DateSelector().map((data) => {
                     return (
                         <CounterItems key={data.DateId}>
-                            <CounterInfos>{data.DiffDays} {data.Titles}</CounterInfos>
+                            <DateInfos>{data.DiffDays} {data.Titles}</DateInfos>
                             <DateInfos>
                                 {`(${data.TargetDt?.split("-").join(".")})`}
                             </DateInfos>
-                            <DateItemBtns isShows={props.Show}>
-                                <button onClick={() => onEdits(data)}>수정</button>
-                                <button onClick={() => DeleteDays(String(data.DateId))}>삭제</button>
-                            </DateItemBtns>
+                            <DateItemBtnBox isShows={props.Show}>
+                                <DateItemBtn className="EditBtn" onClick={() => onEdits(data)}>수정</DateItemBtn>
+                                <DateItemBtn className="DeleteBtn" onClick={() => DeleteDays(String(data.DateId))}>삭제</DateItemBtn>
+                            </DateItemBtnBox>
                         </CounterItems>
                     );
                 })
@@ -77,4 +104,4 @@ function Counters(props: I_Counters){
     );
 };
 
-export default Counters;
+export default DateItems;

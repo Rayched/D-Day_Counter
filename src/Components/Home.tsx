@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import AddDateItems from "./AddForms";
-import Counters from "./Counters";
+import Counters from "./DateItems";
 import { useStore } from "zustand";
 import EditForms from "./EditForms";
 import { InputFormStore } from "../store";
@@ -62,13 +62,24 @@ const ControlBtnBox = styled.div`
     flex-direction: row;
     align-items: center;
     margin: 3px 0px;
+
+    .EditCancleBtn {
+        color: white;
+        background-color: rgb(255, 100, 100);
+    };
 `;
 
 const ControlBtn = styled.button`
-    width: 90px;
+    width: 100px;
+    height: 35px;
     border: 2px solid black;
     border-radius: 10px;
     margin: 5px 3px;
+    font-size: 16.5px;
+    font-weight: bold;
+    font-family: inherit;
+    align-items: center;
+    text-align: center;
 `;
 
 function Home(){
@@ -117,7 +128,7 @@ function Home(){
                 </FormBox>
                 <ControlBtnBox>
                     <ControlBtn onClick={() => setShow(true)} disabled={Show}>D-Day 편집</ControlBtn>
-                    {Show ? <ControlBtn onClick={() => setShow(false)}>편집 취소</ControlBtn> : null}
+                    {Show ? <ControlBtn className="EditCancleBtn" onClick={() => setShow(false)}>편집 취소</ControlBtn> : null}
                 </ControlBtnBox>
                 <Counters Show={Show} setShow={setShow}/>
             </Container>
