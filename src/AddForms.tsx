@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import FormLayout from "./components/Forms/FormLayout";
+import FormLayout from "./components/FormLayout";
 
 const InputBox = styled.div`
     display: flex;

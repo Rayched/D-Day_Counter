@@ -1,10 +1,10 @@
-import { useForm } from "react-hook-form";
-import FormLayout from "./FormLayout";
+import FormLayout from "../FormLayout";
 import { useState } from "react";
-import { CategoryStore } from "../../stores";
-import { useStore } from "zustand";
 import styled from "styled-components";
-import {motion} from "framer-motion";
+import {AnimatePresence, motion} from "framer-motion";
+import AddCategoryForms from "./AddCategoryForms";
+import EditCategoryForms from "./EditCategoryForms";
+import DelCategoryForms from "./DelCategoryForms";
 
 type CategoryBtnTypes = {
     BtnId: string;
@@ -37,7 +37,7 @@ const ModeButtons = styled(motion.div)`
     position: relative;
 `;
 
-const InputForms = styled.form`
+const CategoryInputBox = styled.div`
     width: 96%;
     height: 80%;
     max-width: 379px;
@@ -45,11 +45,13 @@ const InputForms = styled.form`
     background-color: #dfe4ea;
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 `;
 
 export default function CategoryForms(){
-    const {register, handleSubmit, setValue} = useForm();
-    const {Categories, AddNewCategory} = useStore(CategoryStore);
     const [CategoryMode, setCategoryMode] = useState("AddBtn");
 
     const CategoryBtns: CategoryBtnTypes[] = [
@@ -85,7 +87,13 @@ export default function CategoryForms(){
                     })
                 }
             </ModeSelect>
-            <InputForms></InputForms>
+            <CategoryInputBox>
+                <AnimatePresence mode="wait">
+                    {CategoryMode === "AddBtn" ? <AddCategoryForms /> : null}
+                    {CategoryMode === "EditBtn" ? <EditCategoryForms/> : null}
+                    {CategoryMode === "DelBtn" ? <DelCategoryForms /> : null}
+                </AnimatePresence>
+            </CategoryInputBox>
         </FormLayout>
     );
 };

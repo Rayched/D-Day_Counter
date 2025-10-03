@@ -6,7 +6,8 @@ import { useForm } from "react-hook-form";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { faGear } from "@fortawesome/free-solid-svg-icons";
 import AddForms from "./AddForms";
-import CategoryForms from "./components/Forms/CategoryForms";
+import CategoryForms from "./components/CategoryForms/CategoryForms";
+import { I_Category } from "./Project-types";
 
 interface I_CategoryForms {
     CategorySelect?: string;
@@ -94,6 +95,13 @@ export default function App(){
         setCategory(value);
     };
 
+    //디데이 카운터, 기본 카테고리
+    const DefaultCategory: I_Category = {
+        CategoryId: "category0",
+        CategoryNm: "All",
+        CategoryIcon: ""
+    };
+
     return (
         <>
             <Wrapper>
@@ -103,6 +111,7 @@ export default function App(){
                 <Navs>
                     <CategoryBox>
                         <CategorySelect value={NowCategory} onChange={Category_Change}>
+                            <option key={DefaultCategory.CategoryId}>{DefaultCategory.CategoryNm}</option>
                             {
                                 Categories.map((data) => {
                                     return (

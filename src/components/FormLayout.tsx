@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import motion from "framer-motion";
 import { useStore } from "zustand";
-import { ShowFormStore } from "../../stores";
+import { ShowFormStore } from "../stores";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
