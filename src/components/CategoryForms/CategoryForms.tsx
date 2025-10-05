@@ -34,6 +34,7 @@ const ModeButtons = styled(motion.div)`
     align-items: center;
     text-align: center;
     font-size: 15px;
+    font-weight: bold;
     position: relative;
 `;
 
@@ -73,7 +74,6 @@ export default function CategoryForms(){
                                 initial={false}
                                 animate={{
                                     backgroundColor: data.BtnId === CategoryMode ? "#dfe4ea" : "#ffffff",
-                                    fontWeight: data.BtnId === CategoryMode ? "bold" : "none"
                                 }}
                                 transition={{
                                     type: "tween",

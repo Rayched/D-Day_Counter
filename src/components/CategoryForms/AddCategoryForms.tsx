@@ -64,8 +64,7 @@ export default function AddCategoryForms(){
                 <InputBox>
                     <h4>카테고리 아이콘 (이모지)</h4>
                     <input 
-                        type="text" 
-                        maxLength={1} 
+                        type="text"  
                         placeholder="'window + R' => 이모지 입력" 
                         {...register("CategoryIcon")}
                     />
