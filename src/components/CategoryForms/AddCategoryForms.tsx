@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import InputLayout from "./InputLayout";
 import styled from "styled-components";
-import { CategoryStore, ShowFormStore } from "../../stores";
+import { CategoryStore, FormTypeStore } from "../../stores";
 import { useStore } from "zustand";
 import { I_Category } from "../../Project-types";
 
@@ -26,7 +26,7 @@ const InputBox = styled.div`
 
 export default function AddCategoryForms(){
     const {register, handleSubmit, setValue} = useForm();
-    const {setShowForms} = useStore(ShowFormStore);
+    const {setCategoryEdits} = useStore(FormTypeStore);
     const {Categories, AddNewCategory} = useStore(CategoryStore);
 
     const onValid = ({CategoryNm, CategoryIcon}: I_AddFormProps) => {
@@ -43,7 +43,7 @@ export default function AddCategoryForms(){
         setValue("CategoryNm", "");
         setValue("CategoryIcon", "");
 
-        setShowForms(false);
+        setCategoryEdits();
     };
 
     return (

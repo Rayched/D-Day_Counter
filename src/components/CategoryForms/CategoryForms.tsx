@@ -5,6 +5,8 @@ import {AnimatePresence, motion} from "framer-motion";
 import AddCategoryForms from "./AddCategoryForms";
 import EditCategoryForms from "./EditCategoryForms";
 import DelCategoryForms from "./DelCategoryForms";
+import { useStore } from "zustand";
+import { FormTypeStore } from "../../stores";
 
 type CategoryBtnTypes = {
     BtnId: string;
@@ -55,6 +57,8 @@ const CategoryInputBox = styled.div`
 export default function CategoryForms(){
     const [CategoryMode, setCategoryMode] = useState("AddBtn");
 
+    const {setCategoryEdits} = useStore(FormTypeStore);
+
     const CategoryBtns: CategoryBtnTypes[] = [
         {BtnId: "AddBtn", BtnNm: "추가"},
         {BtnId: "EditBtn", BtnNm: "수정"},
@@ -62,7 +66,7 @@ export default function CategoryForms(){
     ];
 
     return (
-        <FormLayout FormNm="카테고리 설정">
+        <FormLayout FormNm="카테고리 설정" setStateFn={setCategoryEdits}>
             <ModeSelect>
                 {
                     CategoryBtns.map((data) => {

@@ -14,7 +14,10 @@ export interface I_Category {
     CategoryNm?: string;
 };
 
-export interface I_EditTargets {
-    DayTitle: string;
-    targetDt: string;
+//D-Day Type
+export interface I_DayCountTypes {
+    CountTitle?: string;
+    CountTargetDt?: string;
+    CountBodyText?: string;
+    isStartDayPlusOne?: boolean;
 };

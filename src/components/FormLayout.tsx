@@ -1,7 +1,5 @@
 import styled from "styled-components";
 import motion from "framer-motion";
-import { useStore } from "zustand";
-import { ShowFormStore } from "../stores";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
@@ -9,7 +7,19 @@ import React from "react";
 interface I_FormLayoutProps {
     FormNm: string;
     children: React.ReactNode;
+    setStateFn: () => void;
 };
+
+const FormsWrapper = styled.div`
+    width: 100dvw;
+    height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0px;
+    background-color: rgba(0, 0, 0, 0.8);
+`;
 
 const Container = styled.div`
     width: 400px;
@@ -52,20 +62,20 @@ const FormTitle = styled.div`
     border-bottom: 2px solid #bdc3c7;
 `;
 
-function FormLayout({FormNm, children}: I_FormLayoutProps){
-    const {setShowForms} = useStore(ShowFormStore);
-
+function FormLayout({FormNm, children, setStateFn}: I_FormLayoutProps){
     return (
-        <Container>   
-            <FormHeaders>
-                <FontAwesomeIcon 
-                    icon={faCircleXmark} 
-                    onClick={() => setShowForms(false)}
-                />
-            </FormHeaders>
-            <FormTitle>{FormNm}</FormTitle>
-            {children}
-        </Container>
+        <FormsWrapper>
+            <Container>   
+                <FormHeaders>
+                    <FontAwesomeIcon 
+                        icon={faCircleXmark} 
+                        onClick={setStateFn}
+                    />
+                </FormHeaders>
+                <FormTitle>{FormNm}</FormTitle>
+                {children}
+            </Container>
+        </FormsWrapper>
     );
 };
 

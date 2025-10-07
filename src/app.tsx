@@ -1,17 +1,12 @@
 import styled from "styled-components";
 import { useStore } from "zustand";
-import { CategoryStore, ShowFormStore } from "./stores";
-import { ChangeEvent, useState } from "react";
-import { useForm } from "react-hook-form";
+import { CategoryStore, FormTypeStore } from "./stores";
+import { useState } from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { faGear } from "@fortawesome/free-solid-svg-icons";
-import AddForms from "./AddForms";
 import CategoryForms from "./components/CategoryForms/CategoryForms";
 import { I_Category } from "./Project-types";
-
-interface I_CategoryForms {
-    CategorySelect?: string;
-}
+import DayItemList from "./components/DayItems/DayItemList";
 
 const Wrapper = styled.div`
     display: flex;
@@ -72,22 +67,12 @@ const CategoryBtns = styled.div`
     background-color: rgb(83, 92, 104);
 `;
 
-const FormsWrapper = styled.div`
-    width: 100dvw;
-    height: 100dvh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    top: 0px;
-    background-color: rgba(0, 0, 0, 0.8);
-`;
-
 export default function App(){
     const [NowCategory, setCategory] = useState("All");
 
     const {Categories} = useStore(CategoryStore);
-    const {isShowForms, setShowForms} = useStore(ShowFormStore);
+
+    const {isCategoryEdits, setCategoryEdits} = useStore(FormTypeStore);
 
     const Category_Change = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const {currentTarget: {value}} = event;
@@ -123,18 +108,16 @@ export default function App(){
                                 })
                             }
                         </CategorySelect>
-                        <CategoryBtns onClick={() => setShowForms(true)}>
+                        <CategoryBtns onClick={setCategoryEdits}>
                             <FontAwesomeIcon icon={faGear} style={{color: "#f1f2f6"}} size="1x"/>
                         </CategoryBtns>
                     </CategoryBox>
                     현재 카테고리: {NowCategory}
+                    <button>✏ D-Day 편집</button>
+                    <DayItemList />
                 </Navs>
             </Wrapper>
-            {isShowForms ? (
-                <FormsWrapper>
-                    <CategoryForms />
-                </FormsWrapper>
-            ) : null}
+            {isCategoryEdits ? <CategoryForms />: null}
         </>
     );
 };
