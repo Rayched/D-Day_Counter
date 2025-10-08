@@ -1,13 +1,12 @@
-import FormLayout from "../FormLayouts/FormLayout";
-import { useState } from "react";
-import styled from "styled-components";
-import {AnimatePresence, motion} from "framer-motion";
-import AddCategoryForms from "./AddCategoryForms";
-import EditCategoryForms from "./EditCategoryForms";
-import DelCategoryForms from "./DelCategoryForms";
 import { useStore } from "zustand";
+import FormLayout from "../FormLayouts/FormLayout";
 import { FormTypeStore } from "../../stores";
 import ModeSelect from "../FormLayouts/ModeSelect";
+import { useState } from "react";
+import styled from "styled-components";
+import { AnimatePresence, motion } from "framer-motion";
+import DayAddForm from "./DayAddForm";
+import DayEditForm from "./DayEditForm";
 
 type BtnData = {
     BtnId: string;
@@ -15,7 +14,7 @@ type BtnData = {
 };
 
 const ModeButtons = styled(motion.div)`
-    width: 33%;
+    width: 48.4%;
     padding: 3px 3px;
     align-items: center;
     text-align: center;
@@ -24,7 +23,7 @@ const ModeButtons = styled(motion.div)`
     position: relative;
 `;
 
-const CategoryInputBox = styled.div`
+const DayInputBox = styled.div`
     width: 96%;
     height: 80%;
     max-width: 379px;
@@ -38,22 +37,21 @@ const CategoryInputBox = styled.div`
     align-items: center;
 `;
 
-export default function CategoryForms(){
+export default function DayFormBox(){
+    const {setDayEdits} = useStore(FormTypeStore);
+
     const [NowModes, setModes] = useState("AddBtn");
-
-    const {setCategoryEdits} = useStore(FormTypeStore);
-
-    const CategoryBtns: BtnData[] = [
-        {BtnId: "AddBtn", BtnNm: "추가"},
-        {BtnId: "EditBtn", BtnNm: "수정"},
-        {BtnId: "DelBtn", BtnNm: "삭제"}
+    
+    const DayCountBtns: BtnData[] = [
+        {BtnId: "AddBtn", BtnNm: "D-Day 추가"},
+        {BtnId: "DelBtn", BtnNm: "D-Day 수정"}
     ];
 
     return (
-        <FormLayout FormNm="카테고리 설정" setStateFn={setCategoryEdits}>
+        <FormLayout FormNm="D-Day 편집" setStateFn={setDayEdits}>
             <ModeSelect>
                 {
-                    CategoryBtns.map((data) => {
+                    DayCountBtns.map((data) => {
                         return (
                             <ModeButtons 
                                 key={data.BtnId}
@@ -73,13 +71,12 @@ export default function CategoryForms(){
                     })
                 }
             </ModeSelect>
-            <CategoryInputBox>
+            <DayInputBox>
                 <AnimatePresence mode="wait">
-                    {NowModes === "AddBtn" ? <AddCategoryForms /> : null}
-                    {NowModes === "EditBtn" ? <EditCategoryForms/> : null}
-                    {NowModes === "DelBtn" ? <DelCategoryForms /> : null}
+                    {NowModes === "AddBtn" ? <DayAddForm /> : null}
+                    {NowModes === "DelBtn" ? <DayEditForm /> : null}
                 </AnimatePresence>
-            </CategoryInputBox>
+            </DayInputBox>
         </FormLayout>
     );
-};
+}

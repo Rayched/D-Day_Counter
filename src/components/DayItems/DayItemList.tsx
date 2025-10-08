@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { DayCountStore, FormTypeStore } from "../../stores";
 import { useStore } from "zustand";
-import AddForms from "../DayForms/AddForms";
 import DayItem from "./DayItem";
+import DayFormBox from "../DayForms/DayFormBox";
 
 const DayItemListContainer = styled.div`
     width: 300px;
@@ -15,9 +15,7 @@ const DayItemListContainer = styled.div`
 
 function DayItemList(){
     const {DayCounts} = useStore(DayCountStore);
-    const {
-        isDayAdds, isDayEdits, setDayAdds, setDayEdits
-    } = useStore(FormTypeStore);
+    const {isDayEdits, setDayEdits} = useStore(FormTypeStore);
 
     return (
         <>
@@ -26,17 +24,17 @@ function DayItemList(){
                     DayCounts.map((data) => {
                         return (
                             <DayItem 
+                                key={data.CountId}
                                 Title={data.CountTitle}
                                 TargetDt={data.CountTargetDt}
+                                DayCountId={data.CountId}
                             />
                         );
                     })
                 }
-                <button onClick={setDayAdds}>D-Day 추가</button>
+                <button onClick={setDayEdits}>D-Day 편집</button>
             </DayItemListContainer>
-            {
-                isDayAdds ? <AddForms /> : null
-            }
+            {isDayEdits ? <DayFormBox /> : null}
         </>
     );
 };

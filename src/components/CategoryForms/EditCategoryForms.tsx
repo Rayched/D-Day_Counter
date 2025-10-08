@@ -1,5 +1,5 @@
 import { useStore } from "zustand";
-import InputLayout from "./InputLayout";
+import InputLayout from "../FormLayouts/InputLayout";
 import { CategoryStore } from "../../stores";
 import styled from "styled-components";
 import { useState } from "react";

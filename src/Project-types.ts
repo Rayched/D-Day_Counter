@@ -16,6 +16,7 @@ export interface I_Category {
 
 //D-Day Type
 export interface I_DayCountTypes {
+    CountId: string;
     CountTitle?: string;
     CountTargetDt?: string;
     CountBodyText?: string;

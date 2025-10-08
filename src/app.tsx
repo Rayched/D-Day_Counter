@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useStore } from "zustand";
-import { CategoryStore, FormTypeStore } from "./stores";
+import { CategoryStore, DayCountEditStore, FormTypeStore } from "./stores";
 import { useState } from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { faGear } from "@fortawesome/free-solid-svg-icons";
@@ -71,8 +71,8 @@ export default function App(){
     const [NowCategory, setCategory] = useState("All");
 
     const {Categories} = useStore(CategoryStore);
-
     const {isCategoryEdits, setCategoryEdits} = useStore(FormTypeStore);
+    const {IsDayCountEdits, setDayCountEdits} = useStore(DayCountEditStore);
 
     const Category_Change = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const {currentTarget: {value}} = event;
@@ -113,7 +113,9 @@ export default function App(){
                         </CategoryBtns>
                     </CategoryBox>
                     현재 카테고리: {NowCategory}
-                    <button>✏ D-Day 편집</button>
+                    <button onClick={setDayCountEdits}>
+                        {IsDayCountEdits ? "삭제 취소" : "✏ D-Day 삭제"}
+                    </button>
                     <DayItemList />
                 </Navs>
             </Wrapper>

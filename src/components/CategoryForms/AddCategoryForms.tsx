@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import InputLayout from "./InputLayout";
+import InputLayout from "../FormLayouts/InputLayout";
 import styled from "styled-components";
 import { CategoryStore, FormTypeStore } from "../../stores";
 import { useStore } from "zustand";

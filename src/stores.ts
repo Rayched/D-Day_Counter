@@ -60,18 +60,14 @@ export const CategoryStore = create<I_CategoryStore>((set) => ({
 //Render 여부를 종합적으로 관리하는 Store
 interface I_FormTypeStore {
     isCategoryEdits: boolean;
-    isDayAdds: boolean; //D-Day 추가 모드 관리
-    isDayEdits: boolean; //D-Day 수정 모드 관리
-    setDayAdds: () => void;
+    isDayEdits: boolean; //D-Day 추가 및 수정 form 관리
     setDayEdits: () => void;
     setCategoryEdits: () => void;
 };
 
 export const FormTypeStore = create<I_FormTypeStore>((set) => ({
-    isDayAdds: false,
     isDayEdits: false,
     isCategoryEdits: false,
-    setDayAdds: () => set((state) => ({isDayAdds: !state.isDayAdds})),
     setDayEdits: () => set((state) => ({isDayEdits: !state.isDayEdits})),
     setCategoryEdits: () => set((state) => ({isCategoryEdits: !state.isCategoryEdits}))
 }));
@@ -79,6 +75,7 @@ export const FormTypeStore = create<I_FormTypeStore>((set) => ({
 interface I_DayCountStore {
     DayCounts: I_DayCountTypes[],
     AddNewDayCount: (newDayCount: I_DayCountTypes) => void; 
+    DeleteDayCount: (targetId: string) => void;
 };
 
 //D-Day 정보를 관리하는 Store
@@ -86,5 +83,24 @@ export const DayCountStore = create<I_DayCountStore>((set) => ({
     DayCounts: [],
     AddNewDayCount: (newDayCount) => set((prev) => ({
         DayCounts: [...prev.DayCounts, newDayCount]
+    })),
+    DeleteDayCount: (targetId) => set((state) => {
+        const TargetFiltering = state.DayCounts.filter((data) => data.CountId !== targetId);
+
+        return {
+            DayCounts: TargetFiltering
+        };
+    })
+}));
+
+interface I_DayCountEditStore {
+    IsDayCountEdits: boolean;
+    setDayCountEdits: () => void;
+};
+
+export const DayCountEditStore = create<I_DayCountEditStore>((set) => ({
+    IsDayCountEdits: false,
+    setDayCountEdits: () => set((prev) => ({
+        IsDayCountEdits: !(prev.IsDayCountEdits)
     }))
-}))
+}));
