@@ -6,7 +6,7 @@ import { CategoryStore, DayCountStore, FormTypeStore } from "../../stores";
 import { GetNowDate } from "../../modules/GetDateInfos";
 import { I_DayCountTypes } from "../../Project-types";
 
-interface I_FormData {
+interface I_DayCountForms {
     Category?: string;
     TargetDt?: string;
     Title?: string;
@@ -33,7 +33,7 @@ export default function DayAddForm(){
 
     const TodayDate = GetNowDate().join("-");
 
-    const onValid = (FormData: I_FormData) => {
+    const onValid = (FormData: I_DayCountForms) => {
         console.log(FormData);
         const DayId = String(FormData.TargetDt).split("-").join("") + `DayCount${DayCounts.length + 1}`;
         const NewDayCount: I_DayCountTypes = {

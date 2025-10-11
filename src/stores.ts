@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { I_Category, I_DayCountTypes } from "./Project-types";
+import { I_DayCountEditForms } from "./components/DayForms/DayEditForm";
 
 //CategoryStore Type Setting
 interface I_CategoryStore {
@@ -76,6 +77,7 @@ interface I_DayCountStore {
     DayCounts: I_DayCountTypes[],
     AddNewDayCount: (newDayCount: I_DayCountTypes) => void; 
     DeleteDayCount: (targetId: string) => void;
+    UpdateDayCount: (NewValue: I_DayCountEditForms) => void;
 };
 
 //D-Day 정보를 관리하는 Store
@@ -89,6 +91,33 @@ export const DayCountStore = create<I_DayCountStore>((set) => ({
 
         return {
             DayCounts: TargetFiltering
+        };
+    }),
+    UpdateDayCount: (NewValue) => set((state) => {
+        const Idx = state.DayCounts.findIndex((data) => data.CountId === NewValue.oldCountId);
+
+        if(Idx === -1){
+            return { DayCounts: state.DayCounts };
+        } else {
+            const DayCountText = NewValue.oldCountId?.slice(8);
+            const NewCountId = String(NewValue.NewTargetDt).split("-").join("") + DayCountText;
+
+            const UpdateValue: I_DayCountTypes = {
+                CountId: NewCountId,
+                CountTitle: NewValue.NewTitle,
+                CountBodyText: NewValue.NewBodyText,
+                CountTargetDt: NewValue.NewTargetDt,
+                Category: NewValue.Category,
+                isStartDayPlusOne: NewValue.StartDtEdits
+            };
+
+            return {
+                DayCounts: [
+                    ...state.DayCounts.slice(0, Idx),
+                    UpdateValue,
+                    ...state.DayCounts.slice(Idx + 1)
+                ]
+            };
         };
     })
 }));
