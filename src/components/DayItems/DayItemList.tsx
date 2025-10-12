@@ -14,14 +14,14 @@ const DayItemListContainer = styled.div`
 `;
 
 function DayItemList(){
-    const {DayCounts} = useStore(DayCountStore);
+    const DayCountData = DayCountStore.getState().DayCountSelector();
     const {isDayEdits, setDayEdits} = useStore(FormTypeStore);
 
     return (
         <>
             <DayItemListContainer>
                 {
-                    DayCounts.map((data) => {
+                    DayCountData.map((data) => {
                         return (
                             <DayItem 
                                 key={data.CountId}

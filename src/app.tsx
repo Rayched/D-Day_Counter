@@ -1,11 +1,11 @@
 import styled from "styled-components";
 import { useStore } from "zustand";
-import { CategoryStore, DayCountEditStore, FormTypeStore } from "./stores";
-import { useState } from "react";
+import { CategoryStore, DayCountEditStore, DayCountStore, FormTypeStore } from "./stores";
+import { useEffect, useState } from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { faGear } from "@fortawesome/free-solid-svg-icons";
 import CategoryForms from "./components/CategoryForms/CategoryForms";
-import { I_Category } from "./Project-types";
+import { I_Category, I_DayCountTypes } from "./Project-types";
 import DayItemList from "./components/DayItems/DayItemList";
 
 const Wrapper = styled.div`
@@ -68,22 +68,20 @@ const CategoryBtns = styled.div`
 `;
 
 export default function App(){
-    const [NowCategory, setCategory] = useState("All");
-
-    const {Categories} = useStore(CategoryStore);
+    const {Categories, setNowCategory} = useStore(CategoryStore);
     const {isCategoryEdits, setCategoryEdits} = useStore(FormTypeStore);
     const {IsDayCountEdits, setDayCountEdits} = useStore(DayCountEditStore);
 
     const Category_Change = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const {currentTarget: {value}} = event;
         console.log(value);
-        setCategory(value);
+        setNowCategory(value);
     };
 
     //디데이 카운터, 기본 카테고리
     const DefaultCategory: I_Category = {
         CategoryId: "category0",
-        CategoryNm: "All",
+        CategoryNm: "전체",
         CategoryIcon: ""
     };
 
@@ -95,12 +93,14 @@ export default function App(){
                 </Headers>
                 <Navs>
                     <CategoryBox>
-                        <CategorySelect value={NowCategory} onChange={Category_Change}>
-                            <option key={DefaultCategory.CategoryId}>{DefaultCategory.CategoryNm}</option>
+                        <CategorySelect onChange={Category_Change}>
+                            <option key={DefaultCategory.CategoryId} value="category00">
+                                {DefaultCategory.CategoryNm}
+                            </option>
                             {
                                 Categories.map((data) => {
                                     return (
-                                        <option key={data.CategoryId}>
+                                        <option key={data.CategoryId} value={data.CategoryId}>
                                             {data.CategoryIcon === "" ? null : data.CategoryIcon} 
                                             {data.CategoryNm}
                                         </option>
@@ -112,7 +112,6 @@ export default function App(){
                             <FontAwesomeIcon icon={faGear} style={{color: "#f1f2f6"}} size="1x"/>
                         </CategoryBtns>
                     </CategoryBox>
-                    현재 카테고리: {NowCategory}
                     <button onClick={setDayCountEdits}>
                         {IsDayCountEdits ? "삭제 취소" : "✏ D-Day 삭제"}
                     </button>
