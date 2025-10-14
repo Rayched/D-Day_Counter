@@ -3,6 +3,8 @@ import { useStore } from "zustand";
 import { CategoryStore, DayCountEditStore, DayCountStore } from "../../stores";
 import { GetNowDate } from "../../modules/GetDateInfos";
 import { useEffect, useState } from "react";
+import DayDetails from "./DayDetails";
+import { motion } from "framer-motion";
 
 interface I_DayItemProps {
     CountId: string;
@@ -12,7 +14,7 @@ interface I_DayItemProps {
     isStartDayEdits?: boolean;
 };
 
-const ItemContainer = styled.div`
+const ItemContainer = styled(motion.div)`
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -30,6 +32,7 @@ function DayItem({Title, TargetDt, CountId, Category}: I_DayItemProps){
     const C_Icons = CategorySelectors.find((data) => data.CategoryId === Category)?.CategoryIcon;
 
     const [DiffText, setDiffText] = useState("");
+    const [isShowDetails, setShowDetails] = useState(false);
 
     const getDiffText = () => {
         const ModifyNowDates = new Date(GetNowDate().join("-")).getTime();
@@ -67,22 +70,39 @@ function DayItem({Title, TargetDt, CountId, Category}: I_DayItemProps){
         getDiffText();
     }, []);
 
+    const ShowDetails = () => {
+        if(IsDayCountEdits){
+            return;
+        } else {
+            setShowDetails(true);
+        }
+    }
+
     return (
-        <ItemContainer>
-            <div>
-                <span>{DiffText} </span>
-                <span>
-                    {C_Icons !== "" ? C_Icons : null} 
-                    {Title}
-                </span>
-            </div>
-            <div>{`(목표일 ${TargetDt})`}</div>
+        <>
+            <ItemContainer onClick={ShowDetails}>
+                <div>
+                    <span>{DiffText} </span>
+                    <span>
+                        {C_Icons !== "" ? C_Icons : null} 
+                        {Title}
+                    </span>
+                </div>
+                <div>{`(목표일 ${TargetDt})`}</div>
+                {
+                    IsDayCountEdits ? (
+                        <button onClick={() => onDelete(CountId)}>삭제</button>
+                    ) : null
+                }
+            </ItemContainer>
             {
-                IsDayCountEdits ? (
-                    <button onClick={() => onDelete(CountId)}>삭제</button>
-                ) : null
+                isShowDetails ? (
+                <DayDetails 
+                    CountId={CountId}
+                    setStateFn={setShowDetails}
+                />): null
             }
-        </ItemContainer>
+        </>
     );
 };
 
