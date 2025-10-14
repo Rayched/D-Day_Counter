@@ -11,7 +11,6 @@ interface I_DayCountForms {
     TargetDt?: string;
     Title?: string;
     Bodys?: string;
-    StartDtEdits?: boolean;
 };
 
 const FormBox = styled.form`
@@ -27,7 +26,7 @@ const InputBox = styled.div``;
 export default function DayAddForm(){
     const {register, handleSubmit} = useForm();
 
-    const {Categories} = useStore(CategoryStore);
+    const Categories = useStore(CategoryStore).SelectedList();
     const {setDayEdits} = useStore(FormTypeStore);
     const {DayCounts, AddNewDayCount} = useStore(DayCountStore);
 
@@ -41,7 +40,6 @@ export default function DayAddForm(){
             CountTitle: FormData.Title,
             CountBodyText: FormData.Bodys,
             CountTargetDt: FormData.TargetDt,
-            isStartDayPlusOne: FormData.StartDtEdits,
             Category: FormData.Category
         };
         AddNewDayCount(NewDayCount);
@@ -89,13 +87,6 @@ export default function DayAddForm(){
                         placeholder="D-Day와 관련된 설명을 입력하시면 됩니다." 
                         {...register("Bodys")}
                     />
-                </InputBox>
-                <InputBox>
-                    <input 
-                        type="checkbox" 
-                        {...register("StartDtEdits")}
-                    />
-                    목표일(기준일) + 1
                 </InputBox>
                 <button>D-Day 등록하기</button>
             </FormBox>

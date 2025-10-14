@@ -6,68 +6,89 @@ import { I_DayCountEditForms } from "./components/DayForms/DayEditForm";
 
 //CategoryStore Type Setting
 interface I_CategoryStore {
-    Categories: I_Category[];
-    NowCategory: string;
+    //사용자가 추가한 Category state & action's
+    CustomCategories: I_Category[];
     AddNewCategory: (newCategory: I_Category) => void;
     EditCategory: (EditData: I_Category) => void;
     DeleteCategory: (DeleteTargetId: string) => void;
+
+    //사용자가 선택한 category state & action's
+    NowCategory: string;
     setNowCategory: (UserSelected: string) => void;
+
+    //Home 화면에 출력할 Category 목록 (selector)
+    CategoryList: () => I_Category[];
+    SelectedList: () => I_Category[];
 };
+
+const DefaultCategory: I_Category[] = [
+    { CategoryId: "category00", CategoryIcon: "", CategoryNm: "미지정"},
+    { CategoryId: "AllCategory", CategoryIcon: "", CategoryNm: "전체"}
+];
 
 //Category Store
 export const CategoryStore = create<I_CategoryStore>()(
     persist((set, get) => ({
-        Categories: [], //사용자가 추가한 Category 저장하는 배열
-
-        //카테고리 추가 method
+        //사용자가 추가한 Category state, action's
+        CustomCategories: [],
         AddNewCategory: (newCategory) => set((state) => ({
-            Categories: [...state.Categories, newCategory]
+            CustomCategories: [...state.CustomCategories, newCategory]
         })),
-        //카테고리 수정 method
         EditCategory: (EditData) => set((state) => {
-            const FindTargets = state.Categories.findIndex((data) => data.CategoryId === EditData.CategoryId);
+            const prevCategory = state.CustomCategories;
+            const idx = prevCategory.findIndex((data) => data.CategoryId === EditData.CategoryId);
 
-            //Categories에서 수정하려는 category 못찾을 경우
-            if(FindTargets === -1){
+            if(idx === -1){
                 return {
-                    Categories: state.Categories
+                    CustomCategories: prevCategory
                 };
             } else {
-                const UpdateValue: I_Category[] = [
-                    ...state.Categories.slice(0, FindTargets),
-                    EditData,
-                    ...state.Categories.slice(FindTargets + 1)
-                ];
-
                 return {
-                    Categories: UpdateValue
+                    CustomCategories: [
+                        ...prevCategory.slice(0, idx),
+                        EditData,
+                        ...prevCategory.slice(idx + 1)
+                    ]
                 };
-            };
+            }
         }),
+        DeleteCategory: (targetId) => set((state) => ({
+            CustomCategories: [
+                ...state.CustomCategories.filter((data) => data.CategoryId !== targetId)
+            ]
+        })),
 
-        //카테고리 삭제 method
-        DeleteCategory: (DeleteTargetId) => set((state) => {
-            const Idx = state.Categories.findIndex((data) => data.CategoryId === DeleteTargetId);
+        //사용자가 선택한 category 기억해두는 state
+        //이를 수정하는 action
+        NowCategory: String(DefaultCategory[1].CategoryId),
+        setNowCategory: (UserSelected) => set({NowCategory: UserSelected}),
 
-            if(Idx === -1){
-                return {Categories: state.Categories};
-            } else {
-                const UpdateValue: I_Category[] = [
-                    ...state.Categories.slice(0, Idx),
-                    ...state.Categories.slice(Idx + 1)
-                ]; 
-                return {
-                    Categories: UpdateValue
-                };
-            };
-        }),
-        NowCategory: "", //사용자가 선택한 Category 기억하는 state
-        setNowCategory: (UserSelected) => set(({NowCategory: UserSelected}))
+        //Home 화면에 띄울 카테고리 목록을 return하는 selector
+        CategoryList: () => {
+            const Customs = get().CustomCategories;
+
+            const Categories: I_Category[] = [
+                DefaultCategory[1],
+                ...Customs
+            ];
+
+            return Categories;
+        },
+
+        //D-Day Form, 카테고리 목록 return하는 selector
+        SelectedList: () => {
+            const Defaults = DefaultCategory[0]
+            const Customs = get().CustomCategories;
+
+            return [
+                Defaults, ...Customs
+            ];
+        }
     }), {
         name: "Category-Storage",
-        partialize: (state) => ({Categories: state.Categories})
-    }
-));
+        partialize: (state) => ({CustomCategories: state.CustomCategories})
+    })
+)
 
 //D-Day 추가 및 수정, Category 편집 시 나오는 form
 //Render 여부를 종합적으로 관리하는 Store
@@ -124,7 +145,6 @@ export const DayCountStore = create<I_DayCountStore>()(
                     CountBodyText: NewValue.NewBodyText,
                     CountTargetDt: NewValue.NewTargetDt,
                     Category: NewValue.Category,
-                    isStartDayPlusOne: NewValue.StartDtEdits
                 };
 
                 return {
@@ -140,7 +160,7 @@ export const DayCountStore = create<I_DayCountStore>()(
             const {DayCounts} = get();
             const {NowCategory} = CategoryStore();
 
-            if(NowCategory === "category00"){
+            if(NowCategory === "AllCategory"){
                 return DayCounts;
             } else {
                 const DayCountsFilter = DayCounts.filter((data) => data.Category === NowCategory);

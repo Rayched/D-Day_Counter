@@ -14,13 +14,13 @@ const InputBox = styled.div`
 `;
 
 export default function DelCategoryForms(){
-    const {Categories, DeleteCategory} = useStore(CategoryStore);
+    const {CustomCategories, DeleteCategory} = useStore(CategoryStore);
     const {register, handleSubmit, setValue} = useForm();
     const [isTargetEmpty, setTargetEmpty] = useState(false);
     const [TargetIdx, setTargetIdx] = useState(0);
 
     const onValid = ({DeleteTarget}: {DeleteTarget?: string}) => {
-        const Idx = Categories.findIndex((data) => data.CategoryId === DeleteTarget);
+        const Idx = CustomCategories.findIndex((data) => data.CategoryId === DeleteTarget);
 
         if(Idx === -1){
             return;
@@ -31,7 +31,7 @@ export default function DelCategoryForms(){
     };
 
     const onDelete = () => {
-        const GetTargetData = Categories[TargetIdx];
+        const GetTargetData = CustomCategories[TargetIdx];
 
         const confirm = window.confirm(
             `카테고리: ${GetTargetData.CategoryIcon} ${GetTargetData.CategoryId}를 삭제 하겠습니까?`
@@ -54,7 +54,7 @@ export default function DelCategoryForms(){
                 <h4>삭제할 카테고리 선택</h4>
                 <select key="TargetSelect" disabled={isTargetEmpty} {...register("DeleteTarget")}>
                     {
-                        Categories.map((data) => {
+                        CustomCategories.map((data) => {
                             return (
                                 <option key={data.CategoryId} value={data.CategoryId}>
                                     {data.CategoryIcon} {data.CategoryNm}
@@ -71,15 +71,15 @@ export default function DelCategoryForms(){
                         <h4>삭제할 카테고리</h4>
                         <InputBox>
                             <h4>카테고리 아이디</h4>
-                            <input type="text" value={Categories[TargetIdx].CategoryId} disabled />
+                            <input type="text" value={CustomCategories[TargetIdx].CategoryId} disabled />
                         </InputBox>
                         <InputBox>
                             <h4>카테고리 이름</h4>
-                            <input type="text" disabled value={Categories[TargetIdx].CategoryNm} />
+                            <input type="text" disabled value={CustomCategories[TargetIdx].CategoryNm} />
                         </InputBox>
                         <InputBox>
                             <h4>카테고리 아이콘</h4>
-                            <input type="text" value={Categories[TargetIdx].CategoryIcon} disabled/>
+                            <input type="text" value={CustomCategories[TargetIdx].CategoryIcon} disabled/>
                         </InputBox>
                         <button onClick={onDelete}>카테고리 삭제</button>
                     </InputForm>

@@ -31,14 +31,13 @@ export default function DayEditForm(){
         CountId: "",
         CountTitle: "",
         CountTargetDt: "",
-        isStartDayPlusOne: false,
         CountBodyText: ""
     };
 
     const [Targets, setTargets] = useState<I_DayCountTypes>(Default);
 
     const {DayCounts, UpdateDayCount} = useStore(DayCountStore);
-    const {Categories} = useStore(CategoryStore);
+    const Categories = useStore(CategoryStore).SelectedList();
     const {setDayEdits} = useStore(FormTypeStore);
 
     const TargetSelected = ({DayCountId}: {DayCountId?: string}) => {
@@ -128,14 +127,6 @@ export default function DayEditForm(){
                                 placeholder="D-Day와 관련된 설명을 입력하시면 됩니다." 
                                 {...register("NewBodyText")}
                             />
-                        </InputBox>
-                        <InputBox>
-                            <input 
-                                type="checkbox" 
-                                checked={Targets.isStartDayPlusOne}
-                                {...register("StartDtEdits")}
-                            />
-                            목표일(기준일) + 1
                         </InputBox>
                         <button>D-Day 수정하기</button>
                     </FormBox>

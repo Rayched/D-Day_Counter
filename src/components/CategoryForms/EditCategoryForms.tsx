@@ -21,7 +21,7 @@ const InputBox = styled.div`
 `;
 
 export default function EditCategoryForms(){
-    const {Categories, EditCategory} = useStore(CategoryStore);
+    const {CustomCategories, EditCategory} = useStore(CategoryStore);
     const [isTargetEmpty, setTargetEmpty] = useState(false);
     const [EditTargetId, setEditTargetId] = useState("");
 
@@ -46,7 +46,7 @@ export default function EditCategoryForms(){
     const onValid = ({EditNm, EditIcon}: I_EditFormProps) => {
         const confirm = window.confirm("카테고리를 수정하겠습니까?");      
 
-        const Idx = Categories.findIndex((data) => data.CategoryId === EditTargetId);
+        const Idx = CustomCategories.findIndex((data) => data.CategoryId === EditTargetId);
 
         if(!confirm){
             alert("카테고리 수정 취소");
@@ -54,7 +54,7 @@ export default function EditCategoryForms(){
             alert(`'${EditIcon} ${EditNm}', 카테고리를 찾지 못했습니다.`);
         } else if(confirm && Idx !== -1){
             const newValue: I_Category = {
-                CategoryId: Categories[Idx].CategoryId,
+                CategoryId: CustomCategories[Idx].CategoryId,
                 CategoryNm: EditNm,
                 CategoryIcon: EditIcon
             };
@@ -72,15 +72,18 @@ export default function EditCategoryForms(){
                 <InputBox>
                     <h4>수정할 카테고리 선택</h4>
                     <select key="Categorys" {...register("targets")} disabled={isTargetEmpty}>
-                        {
-                            Categories.map((data) => {
-                                return (
-                                    <option key={data.CategoryId} value={data.CategoryId}>
-                                        {data.CategoryIcon} {data.CategoryNm}
-                                    </option>
-                                );
-                            })
-                        }
+                        <option value="" disabled>-- 수정할 카테고리를 선택해주세요. --</option>
+                        <optgroup label="수정 가능한 카테고리 목록">
+                            {
+                                CustomCategories.map((data) => {
+                                    return (
+                                        <option key={data.CategoryId} value={data.CategoryId}>
+                                            {data.CategoryIcon} {data.CategoryNm}
+                                        </option>
+                                    );
+                                })
+                            }
+                        </optgroup>
                     </select>
                     <button disabled={isTargetEmpty}>선택</button>
                 </InputBox>

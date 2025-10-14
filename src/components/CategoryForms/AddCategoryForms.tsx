@@ -24,16 +24,41 @@ const InputBox = styled.div`
     width: 90%;
 `;
 
+const CategoryIdBox = styled.div`
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+`;
+
+const CategoryIdText = styled.div`
+    width: 40%;
+    border: 1px solid black;
+    color: black;
+    background-color: #bdc3c7;
+    padding: 3px 0px;
+    margin-left: 3px;
+    font-size: 13px;
+    text-align: center;
+`;
+
+const CreateCategoryId = (CustomLength: number) => {
+    if(CustomLength > 10){
+        return "category" + CustomLength;
+    } else {
+        return "category0" + CustomLength;
+    };
+};
+
 export default function AddCategoryForms(){
     const {register, handleSubmit, setValue} = useForm();
     const {setCategoryEdits} = useStore(FormTypeStore);
-    const {Categories, AddNewCategory} = useStore(CategoryStore);
+    const {CustomCategories, AddNewCategory} = useStore(CategoryStore);
+    const newCategoryId = CreateCategoryId(CustomCategories.length + 1);
 
     const onValid = ({CategoryNm, CategoryIcon}: I_AddFormProps) => {
-        const CategoryNums = Categories.length + 1;
-        const create_C_Id = CategoryNums > 9 ? `category${CategoryNums}` : `category0${CategoryNums}`;
         const Format: I_Category = {
-            CategoryId: create_C_Id,
+            CategoryId: newCategoryId,
             CategoryNm: CategoryNm,
             CategoryIcon: CategoryIcon
         };
@@ -49,10 +74,10 @@ export default function AddCategoryForms(){
     return (
         <InputLayout>
             <AddForms onSubmit={handleSubmit(onValid)}>
-                <InputBox>
-                    <h4>카테고리 아이디</h4>
-                    <input type="text" disabled value={`category${Categories.length + 1}`} />
-                </InputBox>
+                <CategoryIdBox>
+                    카테고리 아이디
+                    <CategoryIdText>{newCategoryId}</CategoryIdText>
+                </CategoryIdBox>
                 <InputBox>
                     <h4>카테고리 이름 *</h4>
                     <input 

@@ -5,7 +5,7 @@ import DayItem from "./DayItem";
 import DayFormBox from "../DayForms/DayFormBox";
 
 const DayItemListContainer = styled.div`
-    width: 300px;
+    padding: 3px;
     border: 2px solid black;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -27,7 +27,8 @@ function DayItemList(){
                                 key={data.CountId}
                                 Title={data.CountTitle}
                                 TargetDt={data.CountTargetDt}
-                                DayCountId={data.CountId}
+                                CountId={data.CountId}
+                                Category={data.Category}
                             />
                         );
                     })

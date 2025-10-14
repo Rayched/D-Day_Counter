@@ -1,11 +1,15 @@
 import styled from "styled-components";
 import { useStore } from "zustand";
-import { DayCountEditStore, DayCountStore } from "../../stores";
+import { CategoryStore, DayCountEditStore, DayCountStore } from "../../stores";
+import { GetNowDate } from "../../modules/GetDateInfos";
+import { useEffect, useState } from "react";
 
 interface I_DayItemProps {
+    CountId: string;
     Title?: string;
     TargetDt?: string;
-    DayCountId: string;
+    Category?: string;
+    isStartDayEdits?: boolean;
 };
 
 const ItemContainer = styled.div`
@@ -13,15 +17,36 @@ const ItemContainer = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 100px;
+    width: 200px;
     height: 80px;
     border: 2px solid black;
     border-radius: 15px;
 `;
 
-function DayItem({Title, TargetDt, DayCountId}: I_DayItemProps){
+function DayItem({Title, TargetDt, CountId, Category}: I_DayItemProps){
     const {DeleteDayCount} = useStore(DayCountStore);
-    const {IsDayCountEdits} = useStore(DayCountEditStore);
+    const {IsDayCountEdits, setDayCountEdits} = useStore(DayCountEditStore);
+    const CategorySelectors = useStore(CategoryStore).SelectedList();
+    const C_Icons = CategorySelectors.find((data) => data.CategoryId === Category)?.CategoryIcon;
+
+    const [DiffText, setDiffText] = useState("");
+
+    const getDiffText = () => {
+        const ModifyNowDates = new Date(GetNowDate().join("-")).getTime();
+        const ModifyTargets = new Date(String(TargetDt)).getTime();
+
+        const Millies = 1000 * 60 * 60 * 24;
+
+        if(ModifyNowDates < ModifyTargets){
+            const Diffs = Math.floor((ModifyTargets - ModifyNowDates) / Millies);
+            setDiffText(`D-${Diffs}`);
+        } else if(ModifyNowDates === ModifyTargets){
+            setDiffText("D-Day");
+        } else if(ModifyNowDates > ModifyTargets){
+            const Diffs = Math.floor((ModifyNowDates - ModifyTargets) / Millies);
+            setDiffText(`D+${Diffs}`);
+        };
+    };
 
     const onDelete = (targetId: string) => {
         const isDelete = window.confirm(
@@ -35,15 +60,26 @@ function DayItem({Title, TargetDt, DayCountId}: I_DayItemProps){
             alert(`'D-Day 명: ${Title} / 목표일: ${TargetDt}', 삭제 완료`);
             DeleteDayCount(targetId);
         };
+        setDayCountEdits();
     };
+
+    useEffect(() => {
+        getDiffText();
+    }, []);
 
     return (
         <ItemContainer>
-            <div>{Title}</div>
-            <div>{TargetDt}</div>
+            <div>
+                <span>{DiffText} </span>
+                <span>
+                    {C_Icons !== "" ? C_Icons : null} 
+                    {Title}
+                </span>
+            </div>
+            <div>{`(목표일 ${TargetDt})`}</div>
             {
                 IsDayCountEdits ? (
-                    <button onClick={() => onDelete(DayCountId)}>삭제</button>
+                    <button onClick={() => onDelete(CountId)}>삭제</button>
                 ) : null
             }
         </ItemContainer>

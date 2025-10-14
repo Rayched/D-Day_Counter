@@ -68,7 +68,8 @@ const CategoryBtns = styled.div`
 `;
 
 export default function App(){
-    const {Categories, setNowCategory} = useStore(CategoryStore);
+    const {setNowCategory} = useStore(CategoryStore);
+    const Categories = CategoryStore().CategoryList();
     const {isCategoryEdits, setCategoryEdits} = useStore(FormTypeStore);
     const {IsDayCountEdits, setDayCountEdits} = useStore(DayCountEditStore);
 
@@ -76,13 +77,6 @@ export default function App(){
         const {currentTarget: {value}} = event;
         console.log(value);
         setNowCategory(value);
-    };
-
-    //디데이 카운터, 기본 카테고리
-    const DefaultCategory: I_Category = {
-        CategoryId: "category0",
-        CategoryNm: "전체",
-        CategoryIcon: ""
     };
 
     return (
@@ -94,9 +88,6 @@ export default function App(){
                 <Navs>
                     <CategoryBox>
                         <CategorySelect onChange={Category_Change}>
-                            <option key={DefaultCategory.CategoryId} value="category00">
-                                {DefaultCategory.CategoryNm}
-                            </option>
                             {
                                 Categories.map((data) => {
                                     return (

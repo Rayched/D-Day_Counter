@@ -20,6 +20,5 @@ export interface I_DayCountTypes {
     CountTitle?: string;
     CountTargetDt?: string;
     CountBodyText?: string;
-    isStartDayPlusOne?: boolean;
     Category?: string;
 };
