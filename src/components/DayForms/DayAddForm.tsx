@@ -10,7 +10,6 @@ interface I_DayCountForms {
     Category?: string;
     TargetDt?: string;
     Title?: string;
-    Bodys?: string;
 };
 
 const FormBox = styled.form`
@@ -38,7 +37,6 @@ export default function DayAddForm(){
         const NewDayCount: I_DayCountTypes = {
             CountId: DayId,
             CountTitle: FormData.Title,
-            CountBodyText: FormData.Bodys,
             CountTargetDt: FormData.TargetDt,
             Category: FormData.Category
         };
@@ -78,14 +76,6 @@ export default function DayAddForm(){
                         type="text"
                         placeholder="D-Day 이름을 입력해주세요."
                         {...register("Title", {required: "D-Day 이름을 입력하지 않았습니다."})}
-                    />
-                </InputBox>
-                <InputBox key="BodysBox">
-                    <h4>D-Day 내용</h4>
-                    <input 
-                        type="text" 
-                        placeholder="D-Day와 관련된 설명을 입력하시면 됩니다." 
-                        {...register("Bodys")}
                     />
                 </InputBox>
                 <button>D-Day 등록하기</button>

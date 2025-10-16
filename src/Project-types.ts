@@ -19,6 +19,5 @@ export interface I_DayCountTypes {
     CountId: string;
     CountTitle?: string;
     CountTargetDt?: string;
-    CountBodyText?: string;
     Category?: string;
 };

@@ -1,12 +1,13 @@
 import styled from "styled-components";
 import { useStore } from "zustand";
 import { CategoryStore, DayCountEditStore, DayCountStore, FormTypeStore } from "./stores";
-import { useEffect, useState } from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { faGear } from "@fortawesome/free-solid-svg-icons";
 import CategoryForms from "./components/CategoryForms/CategoryForms";
-import { I_Category, I_DayCountTypes } from "./Project-types";
-import DayItemList from "./components/DayItems/DayItemList";
+import { AnimatePresence} from "framer-motion";
+import { useEffect, useState } from "react";
+import { I_DayCountTypes } from "./Project-types";
+import DayItems from "./components/DayItems";
 
 const Wrapper = styled.div`
     display: flex;
@@ -23,6 +24,7 @@ const Headers = styled.header`
     background-color: rgb(0, 0, 0);
     display: flex;
     flex-direction: row;
+    justify-content: center;
     align-items: center;
     font-size: 18px;
     font-weight: bold;
@@ -46,13 +48,22 @@ const CategoryBox = styled.div`
     justify-content: center;
     align-items: center;
     width: inherit;
+    margin-top: 5px;
+    padding: 3px 0px;
 `;
 
 const CategorySelect = styled.select`
-    width: 18em;
+    width: 20em;
     height: 2em;
     max-width: 270px;
     text-align: center;
+    border: 2px solid black;
+    border-radius: 10px;
+    font-weight: bold;
+
+    .CustomCategorys {
+        font-weight: normal;
+    };
 `;
 
 const CategoryBtns = styled.div`
@@ -68,16 +79,38 @@ const CategoryBtns = styled.div`
 `;
 
 export default function App(){
-    const {setNowCategory} = useStore(CategoryStore);
+    const {NowCategory, setNowCategory} = useStore(CategoryStore);
     const Categories = CategoryStore().CategoryList();
     const {isCategoryEdits, setCategoryEdits} = useStore(FormTypeStore);
     const {IsDayCountEdits, setDayCountEdits} = useStore(DayCountEditStore);
 
+    const {DayCounts} = useStore(DayCountStore);
+    const [CountData, setCountData] = useState<I_DayCountTypes[]>();
+
     const Category_Change = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const {currentTarget: {value}} = event;
-        console.log(value);
-        setNowCategory(value);
+
+        if(value === "category00"){
+            setNowCategory(value);
+            setCountData(DayCounts);
+        } else {
+            setNowCategory(value);
+            const Filters = DayCounts.filter((data) => data.Category === value);
+            setCountData(Filters);
+        }
     };
+
+    const DefaultRenders = () => {
+        if(NowCategory !== "category00"){
+            return;
+        } else {
+            setCountData(DayCounts);
+        }
+    };
+
+    useEffect(() => {
+        DefaultRenders();
+    });
 
     return (
         <>
@@ -87,13 +120,12 @@ export default function App(){
                 </Headers>
                 <Navs>
                     <CategoryBox>
-                        <CategorySelect onChange={Category_Change}>
+                        <CategorySelect name="SelectedCategory" onChange={Category_Change}>
                             {
                                 Categories.map((data) => {
                                     return (
-                                        <option key={data.CategoryId} value={data.CategoryId}>
-                                            {data.CategoryIcon === "" ? null : data.CategoryIcon} 
-                                            {data.CategoryNm}
+                                        <option key={data.CategoryId} value={data.CategoryId} className="CustomCategorys">
+                                            {data.CategoryIcon} {data.CategoryNm}
                                         </option>
                                     );
                                 })
@@ -104,10 +136,15 @@ export default function App(){
                         </CategoryBtns>
                     </CategoryBox>
                     <button onClick={setDayCountEdits}>
-                        {IsDayCountEdits ? "삭제 취소" : "✏ D-Day 삭제"}
+                        {IsDayCountEdits ? "편집 취소" : "D-Day 편집"}
                     </button>
-                    <DayItemList />
                 </Navs>
+                <AnimatePresence mode="wait">
+                    <DayItems 
+                        CountDatas={CountData} 
+                        NowCategory={NowCategory}
+                    />
+                </AnimatePresence>
             </Wrapper>
             {isCategoryEdits ? <CategoryForms />: null}
         </>

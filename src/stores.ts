@@ -23,7 +23,7 @@ interface I_CategoryStore {
 
 const DefaultCategory: I_Category[] = [
     { CategoryId: "category00", CategoryIcon: "", CategoryNm: "미지정"},
-    { CategoryId: "AllCategory", CategoryIcon: "", CategoryNm: "전체"}
+    { CategoryId: "category00", CategoryIcon: "", CategoryNm: "전체"}
 ];
 
 //Category Store
@@ -60,7 +60,7 @@ export const CategoryStore = create<I_CategoryStore>()(
 
         //사용자가 선택한 category 기억해두는 state
         //이를 수정하는 action
-        NowCategory: String(DefaultCategory[1].CategoryId),
+        NowCategory: "category00",
         setNowCategory: (UserSelected) => set({NowCategory: UserSelected}),
 
         //Home 화면에 띄울 카테고리 목록을 return하는 selector
@@ -112,7 +112,6 @@ interface I_DayCountStore {
     AddNewDayCount: (newValue: I_DayCountTypes) => void; 
     DeleteDayCount: (targetId: string) => void;
     UpdateDayCount: (NewValue: I_DayCountEditForms) => void;
-    DayCountSelector: () => I_DayCountTypes[];
 };
 
 export const DayCountStore = create<I_DayCountStore>()(
@@ -142,7 +141,6 @@ export const DayCountStore = create<I_DayCountStore>()(
                 const UpdateValue: I_DayCountTypes = {
                     CountId: NewCountId,
                     CountTitle: NewValue.NewTitle,
-                    CountBodyText: NewValue.NewBodyText,
                     CountTargetDt: NewValue.NewTargetDt,
                     Category: NewValue.Category,
                 };
@@ -155,18 +153,7 @@ export const DayCountStore = create<I_DayCountStore>()(
                     ]
                 };
             };
-        }),
-        DayCountSelector: () => {
-            const {DayCounts} = get();
-            const {NowCategory} = CategoryStore();
-
-            if(NowCategory === "AllCategory"){
-                return DayCounts;
-            } else {
-                const DayCountsFilter = DayCounts.filter((data) => data.Category === NowCategory);
-                return DayCountsFilter;
-            }
-        }
+        })
     }),
     {
         name: "DayCount-storage",
