@@ -5,14 +5,26 @@ import {AnimatePresence, motion} from "framer-motion";
 import AddCategoryForms from "./AddCategoryForms";
 import EditCategoryForms from "./EditCategoryForms";
 import DelCategoryForms from "./DelCategoryForms";
-import { useStore } from "zustand";
-import { FormTypeStore } from "../../stores";
-import ModeSelect from "../FormLayouts/ModeSelect";
 
 type BtnData = {
     BtnId: string;
     BtnNm: string;
 };
+
+export interface I_CategoryFormProps {
+    setCategoryEdit: Function;
+};
+
+const ModeBtnBox = styled.div`
+    width: inherit;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+`;
+
 
 const ModeButtons = styled(motion.div)`
     width: 33%;
@@ -38,10 +50,8 @@ const CategoryInputBox = styled.div`
     align-items: center;
 `;
 
-export default function CategoryForms(){
+export default function CategoryForms({setCategoryEdit}: I_CategoryFormProps){
     const [NowModes, setModes] = useState("AddBtn");
-
-    const {setCategoryEdits} = useStore(FormTypeStore);
 
     const CategoryBtns: BtnData[] = [
         {BtnId: "AddBtn", BtnNm: "추가"},
@@ -50,8 +60,8 @@ export default function CategoryForms(){
     ];
 
     return (
-        <FormLayout FormNm="카테고리 설정" setStateFn={setCategoryEdits}>
-            <ModeSelect>
+        <FormLayout FormNm="카테고리 설정" setStateFn={() => setCategoryEdit(false)}>
+            <ModeBtnBox>
                 {
                     CategoryBtns.map((data) => {
                         return (
@@ -72,11 +82,11 @@ export default function CategoryForms(){
                         );
                     })
                 }
-            </ModeSelect>
+            </ModeBtnBox>
             <CategoryInputBox>
                 <AnimatePresence mode="wait">
-                    {NowModes === "AddBtn" ? <AddCategoryForms /> : null}
-                    {NowModes === "EditBtn" ? <EditCategoryForms/> : null}
+                    {NowModes === "AddBtn" ? <AddCategoryForms setCategoryEdit={setCategoryEdit} /> : null}
+                    {NowModes === "EditBtn" ? <EditCategoryForms setCategoryEdit={setCategoryEdit} /> : null}
                     {NowModes === "DelBtn" ? <DelCategoryForms /> : null}
                 </AnimatePresence>
             </CategoryInputBox>

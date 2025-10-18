@@ -2,10 +2,10 @@
 
 import { useStore } from "zustand";
 import { I_DayCountTypes } from "../Project-types";
-import { CategoryStore, FormTypeStore } from "../stores";
+import { CategoryStore } from "../stores";
 import DayFormBox from "./DayForms/DayFormBox";
 import styled from "styled-components";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { GetNowDate } from "../modules/GetDateInfos";
 
@@ -17,14 +17,16 @@ interface I_DayItemsProps {
 const DayItemList = styled(motion.div)`
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+    grid-gap: 10px;
+    place-content: start;
     place-items: center;
     width: 85%;
+    height: 100%;
     max-width: 380px;
-    height: 40%;
-    min-height: 366px;
-    padding: 3px;
-    border: 2px solid black;
+    padding: 5px 3px;
+    border: 1px solid ${(props) => props.theme.BoxBorderColor};
     border-radius: 10px;
+    background-color: ${(props) => props.theme.ItemBoxColor};
 `;
 
 const DayItemBox = styled.div`
@@ -37,6 +39,7 @@ const DayItemBox = styled.div`
     border: 2px solid black;
     border-radius: 15px;
     font-size: 14px;
+    background-color: ${(props) => props.theme.ItemColor};
 `;
 
 const DataBox = styled.div`
@@ -58,9 +61,9 @@ const AddBtn = styled.div`
     align-items: center;
     width: 150px;
     height: 80px;
-    border: 2px solid black;
     border-radius: 15px;
-    background-color: darkgray;
+    color: white;
+    background-color: ${(props) => props.theme.AddBtnColor};
 `;
 
 const DayItemListVar = {
@@ -79,7 +82,8 @@ const DayItemListVar = {
 };
 
 function DayItems({CountDatas, NowCategory}: I_DayItemsProps){
-    const {isDayEdits, setDayEdits} = useStore(FormTypeStore);
+    //const {isDayEdits, setDayEdits} = useStore(FormTypeStore);
+    const [isDayEdits, setDayEdits] = useState(false);
     const CategoryData = useStore(CategoryStore).SelectedList();
 
     const getDiffText = (targetDt?: string) => {
@@ -118,6 +122,7 @@ function DayItems({CountDatas, NowCategory}: I_DayItemsProps){
                     const DiffText = getDiffText(data.CountTargetDt);
                     return (
                         <DayItemBox key={data.CountId}>
+                            <div></div>
                             <DataBox>
                                 <ItemText>{DiffText}</ItemText>
                                 <ItemText>{Icons}</ItemText>
@@ -128,8 +133,12 @@ function DayItems({CountDatas, NowCategory}: I_DayItemsProps){
                     );
                 })
             }
-            <AddBtn onClick={setDayEdits}>D-Day 추가</AddBtn>
-            {isDayEdits ? <DayFormBox /> : null}
+            <AddBtn onClick={() => setDayEdits(true)}>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" width={35} fill="#ffffff">
+                <path d="M352 128C352 110.3 337.7 96 320 96C302.3 96 288 110.3 288 128L288 288L128 288C110.3 288 96 302.3 96 320C96 337.7 110.3 352 128 352L288 352L288 512C288 529.7 302.3 544 320 544C337.7 544 352 529.7 352 512L352 352L512 352C529.7 352 544 337.7 544 320C544 302.3 529.7 288 512 288L352 288L352 128z"/>
+                </svg>
+            </AddBtn>
+            {isDayEdits ? <DayFormBox setStateFn={setDayEdits}/> : null}
         </DayItemList>
     );
 };

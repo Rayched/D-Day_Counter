@@ -1,9 +1,10 @@
 import { useForm } from "react-hook-form";
 import InputLayout from "../FormLayouts/InputLayout";
 import styled from "styled-components";
-import { CategoryStore, FormTypeStore } from "../../stores";
+import { CategoryStore } from "../../stores";
 import { useStore } from "zustand";
 import { I_Category } from "../../Project-types";
+import { I_CategoryFormProps } from "./CategoryForms";
 
 interface I_AddFormProps {
     CategoryNm?: string;
@@ -50,9 +51,8 @@ const CreateCategoryId = (CustomLength: number) => {
     };
 };
 
-export default function AddCategoryForms(){
+export default function AddCategoryForms({setCategoryEdit}: I_CategoryFormProps){
     const {register, handleSubmit, setValue} = useForm();
-    const {setCategoryEdits} = useStore(FormTypeStore);
     const {CustomCategories, AddNewCategory} = useStore(CategoryStore);
     const newCategoryId = CreateCategoryId(CustomCategories.length + 1);
 
@@ -68,7 +68,7 @@ export default function AddCategoryForms(){
         setValue("CategoryNm", "");
         setValue("CategoryIcon", "");
 
-        setCategoryEdits();
+        setCategoryEdit(false);
     };
 
     return (

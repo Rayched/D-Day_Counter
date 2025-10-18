@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { I_Category } from "../../Project-types";
-
+import { I_CategoryFormProps } from "./CategoryForms";
 
 interface I_EditFormProps {
     EditNm?: string;
@@ -20,10 +20,10 @@ const InputBox = styled.div`
     width: 90%;
 `;
 
-export default function EditCategoryForms(){
+export default function EditCategoryForms({setCategoryEdit}: I_CategoryFormProps){
     const {CustomCategories, EditCategory} = useStore(CategoryStore);
     const [isTargetEmpty, setTargetEmpty] = useState(false);
-    const [EditTargetId, setEditTargetId] = useState("");
+    const [prevCategory, setPrevCategory] = useState<I_Category>();
 
     const {register, handleSubmit, setValue} = useForm();
 
@@ -39,31 +39,25 @@ export default function EditCategoryForms(){
     const targetSelected = ({targets}: {targets?: string}) => {
         //targets => 수정 대상 카테고리의 Id 값을 받음 (categoryId)
         console.log(`Target CategoryId: ${targets}`);
-        setEditTargetId(String(targets));
+        const GetTarget = CustomCategories.find((data) => data.CategoryId === targets);
+        setPrevCategory(GetTarget);
         setTargetEmpty(true);
     };
 
     const onValid = ({EditNm, EditIcon}: I_EditFormProps) => {
         const confirm = window.confirm("카테고리를 수정하겠습니까?");      
-
-        const Idx = CustomCategories.findIndex((data) => data.CategoryId === EditTargetId);
-
         if(!confirm){
             alert("카테고리 수정 취소");
-        } else if(confirm && Idx === -1){
-            alert(`'${EditIcon} ${EditNm}', 카테고리를 찾지 못했습니다.`);
-        } else if(confirm && Idx !== -1){
-            const newValue: I_Category = {
-                CategoryId: CustomCategories[Idx].CategoryId,
+            setTargetEmpty(false);
+        } else {
+            const EditData: I_Category = {
+                CategoryId: prevCategory?.CategoryId,
                 CategoryNm: EditNm,
                 CategoryIcon: EditIcon
             };
-            EditCategory(newValue);
-            setValue("EditNm", "");
-            setValue("EditIcon", "");
+            EditCategory(EditData);
         }
-        setTargetEmpty(false);
-        setEditTargetId("");
+        setCategoryEdit(false);
     };    
 
     return (
@@ -96,7 +90,7 @@ export default function EditCategoryForms(){
                             <h4>카테고리 아이디</h4>
                             <input 
                                 type="text" 
-                                value={EditTargetId} 
+                                value={prevCategory?.CategoryId} 
                                 disabled 
                             />
                         </InputBox>
@@ -105,6 +99,7 @@ export default function EditCategoryForms(){
                             <input 
                                 type="text" 
                                 placeholder="카테고리 이름을 입력해주세요." 
+                                defaultValue={prevCategory?.CategoryNm}
                                 {...register("EditNm", {required: true})} 
                             />
                         </InputBox>
@@ -113,6 +108,7 @@ export default function EditCategoryForms(){
                             <input 
                                 type="text"  
                                 placeholder="'window + R' => 이모지 입력" 
+                                defaultValue={prevCategory?.CategoryIcon}
                                 {...register("EditIcon")}
                             />
                         </InputBox>

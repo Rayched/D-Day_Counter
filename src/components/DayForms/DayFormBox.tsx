@@ -1,26 +1,41 @@
-import { useStore } from "zustand";
 import FormLayout from "../FormLayouts/FormLayout";
-import { FormTypeStore } from "../../stores";
-import ModeSelect from "../FormLayouts/ModeSelect";
 import { useState } from "react";
 import styled from "styled-components";
 import { AnimatePresence, motion } from "framer-motion";
 import DayAddForm from "./DayAddForm";
 import DayEditForm from "./DayEditForm";
+import { useStore } from "zustand";
+import { ThemeStore } from "../../stores";
+import { DarkTheme, LightTheme } from "../../styles/theme";
 
 type BtnData = {
     BtnId: string;
     BtnNm: string;
 };
 
+interface I_DayFormBoxProps {
+    setStateFn: Function;
+};
+
+const ModeBtnBox = styled.div`
+    width: inherit;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+`;
+
 const ModeButtons = styled(motion.div)`
-    width: 48.4%;
+    width: 48.5%;
     padding: 3px 3px;
     align-items: center;
     text-align: center;
     font-size: 15px;
     font-weight: bold;
     position: relative;
+    border-radius: inherit;
 `;
 
 const DayInputBox = styled.div`
@@ -28,7 +43,7 @@ const DayInputBox = styled.div`
     height: 80%;
     max-width: 379px;
     max-height: 480px;
-    background-color: #dfe4ea;
+    background-color: ${(props) => props.theme.FormBtnColor};
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px;
     display: flex;
@@ -37,10 +52,9 @@ const DayInputBox = styled.div`
     align-items: center;
 `;
 
-export default function DayFormBox(){
-    const {setDayEdits} = useStore(FormTypeStore);
-
+export default function DayFormBox({setStateFn}: I_DayFormBoxProps){
     const [NowModes, setModes] = useState("AddBtn");
+    const {isDark} = useStore(ThemeStore);
     
     const DayCountBtns: BtnData[] = [
         {BtnId: "AddBtn", BtnNm: "D-Day 추가"},
@@ -48,18 +62,19 @@ export default function DayFormBox(){
     ];
 
     return (
-        <FormLayout FormNm="D-Day 편집" setStateFn={setDayEdits}>
-            <ModeSelect>
+        <FormLayout FormNm="D-Day 편집" setStateFn={() => setStateFn(false)}>
+            <ModeBtnBox>
                 {
                     DayCountBtns.map((data) => {
+                        const ThemeColors = isDark ? DarkTheme : LightTheme;
                         return (
                             <ModeButtons 
                                 key={data.BtnId}
-                                className={data.BtnId}
                                 onClick={() => setModes(data.BtnId)}
                                 initial={false}
                                 animate={{
-                                    backgroundColor: data.BtnId === NowModes ? "#dfe4ea" : "#ffffff"
+                                    color: data.BtnId !== NowModes ? ThemeColors.TextColor : "black",
+                                    backgroundColor: data.BtnId === NowModes ? ThemeColors.FormBtnColor : ThemeColors.FormBgColor
                                 }}
                                 transition={{
                                     type: "tween",
@@ -70,7 +85,7 @@ export default function DayFormBox(){
                         );
                     })
                 }
-            </ModeSelect>
+            </ModeBtnBox>
             <DayInputBox>
                 <AnimatePresence mode="wait">
                     {NowModes === "AddBtn" ? <DayAddForm /> : null}

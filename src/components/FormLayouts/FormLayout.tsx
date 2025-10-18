@@ -15,21 +15,22 @@ const FormsWrapper = styled.div`
     height: 100dvh;
     display: flex;
     justify-content: center;
-    align-items: center;
     position: absolute;
     top: 0px;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 2;
 `;
 
 const Container = styled.div`
-    width: 400px;
+    width: 380px;
     height: 600px;
-    background-color: white;
-    border: 2px solid white;
+    background-color: ${(props) => props.theme.FormBgColor};
+    border: 2px solid ${(props) => props.theme.FormBgColor};
     border-radius: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-top: 20px;
 `;
 
 const FormHeaders = styled.div`
@@ -59,7 +60,16 @@ const FormTitle = styled.div`
     font-weight: bold;
     padding-bottom: 5px;
     margin-bottom: 10px;
-    border-bottom: 2px solid #bdc3c7;
+    color: ${(props) => props.theme.TextColor};
+`;
+
+const FormBodys = styled.div`
+    width: 96%;
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 `;
 
 function FormLayout({FormNm, children, setStateFn}: I_FormLayoutProps){
@@ -73,7 +83,9 @@ function FormLayout({FormNm, children, setStateFn}: I_FormLayoutProps){
                     />
                 </FormHeaders>
                 <FormTitle>{FormNm}</FormTitle>
-                {children}
+                <FormBodys>
+                    {children}
+                </FormBodys>
             </Container>
         </FormsWrapper>
     );

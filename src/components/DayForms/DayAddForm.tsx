@@ -2,7 +2,7 @@ import styled from "styled-components";
 import InputLayout from "../FormLayouts/InputLayout";
 import { useForm } from "react-hook-form";
 import { useStore } from "zustand";
-import { CategoryStore, DayCountStore, FormTypeStore } from "../../stores";
+import { CategoryStore, DayCountStore, FormTypeStore} from "../../stores";
 import { GetNowDate } from "../../modules/GetDateInfos";
 import { I_DayCountTypes } from "../../Project-types";
 
@@ -14,13 +14,60 @@ interface I_DayCountForms {
 
 const FormBox = styled.form`
     width: 100%;
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+`;
+
+const FormDataBox = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    width: 70%;
+    font-weight: bold;
 `;
 
-const InputBox = styled.div``;
+const InputTitle = styled.div`
+    font-size: 15px;
+    margin: 10px 0px;
+    padding-left: 5px;
+`;
+
+const SelectBox = styled.select`
+    width: 200px;
+    height: 23px;
+    text-align: center;
+    border: 2px solid black;
+    border-radius: 10px;
+`;
+
+const InputBox = styled.input`
+    width: 200px;
+    height: 23px;
+    border: 2px solid black;
+    border-radius: 10px;
+    padding: 2px 3px;
+`;
+
+const SubmitBtn = styled.div`
+    width: 100px;
+    height: 20px;
+    margin-top: 10px;
+    border: 2px solid black;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    font-weight: bold;
+    background-color: darkgray;
+
+    &:hover {
+        background-color: #c9c7c7;
+    }
+`;
 
 export default function DayAddForm(){
     const {register, handleSubmit} = useForm();
@@ -46,11 +93,10 @@ export default function DayAddForm(){
 
     return (
         <InputLayout>
-            <h4>* : 필수 입력</h4>
             <FormBox onSubmit={handleSubmit(onValid)}>
-                <InputBox key="CategoryBox">
-                    <h4>카테고리 선택</h4>
-                    <select {...register("Category")}>
+                <FormDataBox key="CategoryBox">
+                    <InputTitle>카테고리 선택</InputTitle>
+                    <SelectBox {...register("Category")}>
                         {
                             Categories.map((data) => {
                                 return (
@@ -60,25 +106,25 @@ export default function DayAddForm(){
                                 );
                             })
                         }
-                    </select>
-                </InputBox>
-                <InputBox key="TargetDtBox">
-                    <h4>목표일 / 기준일 *</h4>
-                    <input 
+                    </SelectBox>
+                </FormDataBox>
+                <FormDataBox key="TargetDtBox">
+                    <InputTitle>목표일 / 기준일 *</InputTitle>
+                    <InputBox
                         type="date" 
                         defaultValue={TodayDate}
                         {...register("TargetDt", {required: "날짜를 지정해주세요."})}
                     />
-                </InputBox>
-                <InputBox key="TitleBox">
-                    <h4>D-Day 이름 *</h4>
-                    <input 
+                </FormDataBox>
+                <FormDataBox key="TitleBox">
+                    <InputTitle>D-Day 이름 *</InputTitle>
+                    <InputBox
                         type="text"
                         placeholder="D-Day 이름을 입력해주세요."
                         {...register("Title", {required: "D-Day 이름을 입력하지 않았습니다."})}
                     />
-                </InputBox>
-                <button>D-Day 등록하기</button>
+                </FormDataBox>
+                <SubmitBtn>D-Day 등록</SubmitBtn>
             </FormBox>
         </InputLayout>
     );
