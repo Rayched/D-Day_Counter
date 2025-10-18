@@ -23,7 +23,7 @@ const FormsWrapper = styled.div`
 
 const Container = styled.div`
     width: 380px;
-    height: 600px;
+    height: 550px;
     background-color: ${(props) => props.theme.FormBgColor};
     border: 2px solid ${(props) => props.theme.FormBgColor};
     border-radius: 10px;
@@ -68,7 +68,6 @@ const FormBodys = styled.div`
     height: 80%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
 `;
 

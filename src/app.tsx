@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useStore } from "zustand";
-import { CategoryStore, DayCountEditStore, DayCountStore, ThemeStore } from "./stores";
+import { CategoryStore, DayCountStore, ThemeStore } from "./stores";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { faGear, faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
 import CategoryForms from "./components/CategoryForms/CategoryForms";
@@ -129,13 +129,15 @@ const ThemeBtn = styled.div`
 `;
 
 export default function App(){
+    //Categor 관련 state
     const {NowCategory, setNowCategory} = useStore(CategoryStore);
     const Categories = CategoryStore().CategoryList();
     const [isCategoryEdit, setCategoryEdit] = useState(false);
-    const {IsDayCountEdits, setDayCountEdits} = useStore(DayCountEditStore);
 
+    //D-Day Data (DayCount's) 관련 state
     const {DayCounts} = useStore(DayCountStore);
     const [CountData, setCountData] = useState<I_DayCountTypes[]>();
+    const [isDelMode, setDelMode] = useState(false);
 
     const {isDark, setDark} = useStore(ThemeStore);
 
@@ -187,15 +189,15 @@ export default function App(){
                             <FontAwesomeIcon icon={faGear} size="1x"/>
                         </CategoryBtns>
                     </CategoryBox>
-                    <EditModeBtn onClick={setDayCountEdits}>
-                        {IsDayCountEdits ? "삭제 취소" : "D-Day 삭제"}
-                    </EditModeBtn>
+                    {isDelMode ? null : <EditModeBtn onClick={() => setDelMode(true)}>D-Day 삭제</EditModeBtn>}
+                    {isDelMode ? <EditModeBtn onClick={() => setDelMode(false)}>삭제 취소</EditModeBtn> : null}
                 </Navs>
                 <Mains>
                     <AnimatePresence mode="wait">
                         <DayItems 
                             CountDatas={CountData} 
                             NowCategory={NowCategory}
+                            isDelMode={isDelMode}
                         />
                     </AnimatePresence>
                 </Mains>

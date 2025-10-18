@@ -166,18 +166,6 @@ export const DayCountStore = create<I_DayCountStore>()(
     }
 ));
 
-interface I_DayCountEditStore {
-    IsDayCountEdits: boolean;
-    setDayCountEdits: () => void;
-};
-
-export const DayCountEditStore = create<I_DayCountEditStore>((set) => ({
-    IsDayCountEdits: false,
-    setDayCountEdits: () => set((prev) => ({
-        IsDayCountEdits: !(prev.IsDayCountEdits)
-    }))
-}));
-
 //Theme 관리 store
 
 interface I_ThemeStore {

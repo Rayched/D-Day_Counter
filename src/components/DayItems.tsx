@@ -2,16 +2,19 @@
 
 import { useStore } from "zustand";
 import { I_DayCountTypes } from "../Project-types";
-import { CategoryStore } from "../stores";
+import { CategoryStore, DayCountStore } from "../stores";
 import DayFormBox from "./DayForms/DayFormBox";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { GetNowDate } from "../modules/GetDateInfos";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircle, faCircleXmark, faXmark } from "@fortawesome/free-solid-svg-icons";
 
 interface I_DayItemsProps {
     CountDatas?: I_DayCountTypes[];
     NowCategory?: string;
+    isDelMode: boolean;
 };
 
 const DayItemList = styled(motion.div)`
@@ -32,14 +35,15 @@ const DayItemList = styled(motion.div)`
 const DayItemBox = styled.div`
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: flex-start;
+    justify-content: center;
     width: 150px;
     height: 80px;
     border: 2px solid black;
     border-radius: 15px;
     font-size: 14px;
     background-color: ${(props) => props.theme.ItemColor};
+    position: relative;
 `;
 
 const DataBox = styled.div`
@@ -66,6 +70,24 @@ const AddBtn = styled.div`
     background-color: ${(props) => props.theme.AddBtnColor};
 `;
 
+const DelBtnBox = styled.div`
+    position: absolute;
+    top: -4px;
+    right: -5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    svg {
+        color: white;
+        width: 11px;
+        height: 10px;
+        border: 1px solid white;
+        border-radius: 20px;
+        background-color: red;
+    }
+`;
+
 const DayItemListVar = {
     "initial": {
         y: 10,
@@ -81,10 +103,12 @@ const DayItemListVar = {
     },
 };
 
-function DayItems({CountDatas, NowCategory}: I_DayItemsProps){
+function DayItems({CountDatas, NowCategory, isDelMode}: I_DayItemsProps){
     //const {isDayEdits, setDayEdits} = useStore(FormTypeStore);
     const [isDayEdits, setDayEdits] = useState(false);
     const CategoryData = useStore(CategoryStore).SelectedList();
+
+    const {DeleteDayCount} = useStore(DayCountStore);
 
     const getDiffText = (targetDt?: string) => {
         const NowDates = new Date(GetNowDate().join("-")).getTime();
@@ -100,6 +124,26 @@ function DayItems({CountDatas, NowCategory}: I_DayItemsProps){
             return `D+${Diffs}`
         } else {
             return "D-Day";
+        }
+    };
+
+    const onDelete = (targetId?: string) => {
+        const Targets = CountDatas?.find((data) => data.CountId === targetId);
+
+        const Confirms = window.confirm(
+            `이름: ${Targets?.CountTitle} / 목표일: ${Targets?.CountTargetDt}\n해당 D-Day를 삭제 하시겠습니까?`
+        );
+
+        if(!Confirms){
+            alert(
+                `'${Targets?.CountTitle} / ${Targets?.CountTargetDt}\n해당 D-Day의 삭제 취소했습니다.`
+            );
+            return;
+        } else if(Confirms){
+            alert(
+                `'${Targets?.CountTitle} / ${Targets?.CountTargetDt}\n해당 D-Day를 삭제했습니다.`
+            );
+            DeleteDayCount(String(targetId));
         }
     };
 
@@ -122,7 +166,16 @@ function DayItems({CountDatas, NowCategory}: I_DayItemsProps){
                     const DiffText = getDiffText(data.CountTargetDt);
                     return (
                         <DayItemBox key={data.CountId}>
-                            <div></div>
+                            <DelBtnBox onClick={() => onDelete(data.CountId)}>
+                                {
+                                    isDelMode ? (
+                                        <FontAwesomeIcon 
+                                            icon={faXmark}
+                                            size="2xs"
+                                        />
+                                    ): null
+                                }
+                            </DelBtnBox>
                             <DataBox>
                                 <ItemText>{DiffText}</ItemText>
                                 <ItemText>{Icons}</ItemText>
