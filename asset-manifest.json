@@ -1,15 +1,13 @@
 {
   "files": {
-    "main.css": "/D-Day_Counter/static/css/main.11155e02.css",
-    "main.js": "/D-Day_Counter/static/js/main.6ad85a6a.js",
-    "static/media/NotoSansKR-Regular.ttf": "/D-Day_Counter/static/media/NotoSansKR-Regular.36802afd186fbb7643b1.ttf",
-    "static/media/NotoSans-Regular.ttf": "/D-Day_Counter/static/media/NotoSans-Regular.9ab05beb031b68562995.ttf",
+    "main.css": "/D-Day_Counter/static/css/main.90f6920e.css",
+    "main.js": "/D-Day_Counter/static/js/main.100f51c0.js",
     "index.html": "/D-Day_Counter/index.html",
-    "main.11155e02.css.map": "/D-Day_Counter/static/css/main.11155e02.css.map",
-    "main.6ad85a6a.js.map": "/D-Day_Counter/static/js/main.6ad85a6a.js.map"
+    "main.90f6920e.css.map": "/D-Day_Counter/static/css/main.90f6920e.css.map",
+    "main.100f51c0.js.map": "/D-Day_Counter/static/js/main.100f51c0.js.map"
   },
   "entrypoints": [
-    "static/css/main.11155e02.css",
-    "static/js/main.6ad85a6a.js"
+    "static/css/main.90f6920e.css",
+    "static/js/main.100f51c0.js"
   ]
 }
