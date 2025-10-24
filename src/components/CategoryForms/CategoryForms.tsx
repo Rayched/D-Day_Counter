@@ -25,7 +25,6 @@ const ModeBtnBox = styled.div`
     border-top-right-radius: 10px;
 `;
 
-
 const ModeButtons = styled(motion.div)`
     width: 33%;
     padding: 3px 3px;
@@ -34,6 +33,7 @@ const ModeButtons = styled(motion.div)`
     font-size: 15px;
     font-weight: bold;
     position: relative;
+    border-radius: inherit;
 `;
 
 const CategoryInputBox = styled.div`

@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { GetNowDate } from "../modules/GetDateInfos";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircle, faCircleXmark, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 interface I_DayItemsProps {
     CountDatas?: I_DayCountTypes[];
@@ -23,9 +23,9 @@ const DayItemList = styled(motion.div)`
     grid-gap: 10px;
     place-content: start;
     place-items: center;
-    width: 85%;
+    width: 90%;
     height: 100%;
-    max-width: 380px;
+    max-width: 385px;
     padding: 5px 3px;
     border: 1px solid ${(props) => props.theme.BoxBorderColor};
     border-radius: 10px;
@@ -37,7 +37,8 @@ const DayItemBox = styled.div`
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
-    width: 150px;
+    width: 100%;
+    max-width: 150px;
     height: 80px;
     border: 2px solid black;
     border-radius: 15px;
@@ -63,7 +64,8 @@ const AddBtn = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 150px;
+    width: 100%;
+    max-width: 150px;
     height: 80px;
     border-radius: 15px;
     color: white;

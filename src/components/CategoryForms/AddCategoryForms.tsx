@@ -14,33 +14,63 @@ interface I_AddFormProps {
 const AddForms = styled.form`
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
     width: 100%;
     height: 100%;
 `;
 
-const InputBox = styled.div`
+const CategoryDataBox = styled.div`
     display: flex;
     flex-direction: column;
-    width: 90%;
+    justify-content: center;
+    width: 70%;
+    margin-bottom: 10px;
+`;
+
+const InputTitle = styled.div`
+    font-size: 15px;
+    margin: 10px 0px;
+    padding-left: 5px;
+    font-weight: bold;
+`;
+
+const InputBox = styled.input`
+    width: 200px;
+    height: 23px;
+    border: 2px solid black;
+    border-radius: 10px;
+    padding: 1px 3px;
 `;
 
 const CategoryIdBox = styled.div`
-    width: 90%;
     display: flex;
-    flex-direction: row;
+    justify-content: center;
     align-items: center;
+    width: 200px;
+    height: 23px;
+    border: 2px solid #504e4e;
+    border-radius: 10px;
+    color: #504e4e;
+    background-color: #bdc3c7;
+    font-weight: bold;
+    font-size: 15px;
 `;
 
-const CategoryIdText = styled.div`
-    width: 40%;
-    border: 1px solid black;
-    color: black;
-    background-color: #bdc3c7;
-    padding: 3px 0px;
-    margin-left: 3px;
-    font-size: 13px;
+const SubmitBtn = styled.button`
+    width: 120px;
+    height: 25px;
+    margin-top: 10px;
+    border: 2px solid black;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    background-color: #504e4e;
 `;
 
 const CreateCategoryId = (CustomLength: number) => {
@@ -74,27 +104,27 @@ export default function AddCategoryForms({setCategoryEdit}: I_CategoryFormProps)
     return (
         <InputLayout>
             <AddForms onSubmit={handleSubmit(onValid)}>
-                <CategoryIdBox>
-                    카테고리 아이디
-                    <CategoryIdText>{newCategoryId}</CategoryIdText>
-                </CategoryIdBox>
-                <InputBox>
-                    <h4>카테고리 이름 *</h4>
-                    <input 
+                <CategoryDataBox>
+                    <InputTitle>카테고리 아이디</InputTitle>
+                    <CategoryIdBox>{newCategoryId}</CategoryIdBox>
+                </CategoryDataBox>
+                <CategoryDataBox>
+                    <InputTitle>카테고리 이름 *</InputTitle>
+                    <InputBox
                         type="text" 
                         placeholder="카테고리 이름을 입력해주세요." 
                         {...register("CategoryNm", {required: true})}
                     />
-                </InputBox>
-                <InputBox>
-                    <h4>카테고리 아이콘 (이모지)</h4>
-                    <input 
+                </CategoryDataBox>
+                <CategoryDataBox>
+                    <InputTitle>카테고리 아이콘 (이모지)</InputTitle>
+                    <InputBox
                         type="text"  
                         placeholder="'window + R' => 이모지 입력" 
                         {...register("CategoryIcon")}
                     />
-                </InputBox>
-                <button>카테고리 추가</button>
+                </CategoryDataBox>
+                <SubmitBtn>카테고리 추가</SubmitBtn>
             </AddForms>
         </InputLayout>
     );

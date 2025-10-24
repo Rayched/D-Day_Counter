@@ -88,7 +88,7 @@ export default function DayFormBox({setStateFn}: I_DayFormBoxProps){
             </ModeBtnBox>
             <DayInputBox>
                 <AnimatePresence mode="wait">
-                    {NowModes === "AddBtn" ? <DayAddForm /> : null}
+                    {NowModes === "AddBtn" ? <DayAddForm CloseForms={setStateFn} /> : null}
                     {NowModes === "DelBtn" ? <DayEditForm /> : null}
                 </AnimatePresence>
             </DayInputBox>

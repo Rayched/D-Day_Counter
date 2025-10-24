@@ -112,6 +112,7 @@ interface I_DayCountStore {
     AddNewDayCount: (newValue: I_DayCountTypes) => void; 
     DeleteDayCount: (targetId: string) => void;
     UpdateDayCount: (NewValue: I_DayCountEditForms) => void;
+    DeleteCategoryWithCounts: (categoryId: string) => void;
 };
 
 export const DayCountStore = create<I_DayCountStore>()(
@@ -152,6 +153,14 @@ export const DayCountStore = create<I_DayCountStore>()(
                         ...state.DayCounts.slice(Idx + 1)
                     ]
                 };
+            };
+        }),
+        DeleteCategoryWithCounts: (categoryId) => set((state) => {
+            const {DayCounts} = state;
+            const DayCountsFilter = DayCounts.filter((data) => data.Category !== categoryId);
+
+            return {
+                DayCounts: [...DayCountsFilter]
             };
         })
     }),

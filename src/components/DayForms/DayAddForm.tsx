@@ -2,7 +2,7 @@ import styled from "styled-components";
 import InputLayout from "../FormLayouts/InputLayout";
 import { useForm } from "react-hook-form";
 import { useStore } from "zustand";
-import { CategoryStore, DayCountStore, FormTypeStore} from "../../stores";
+import { CategoryStore, DayCountStore} from "../../stores";
 import { GetNowDate } from "../../modules/GetDateInfos";
 import { I_DayCountTypes } from "../../Project-types";
 
@@ -10,6 +10,10 @@ interface I_DayCountForms {
     Category?: string;
     TargetDt?: string;
     Title?: string;
+};
+
+interface I_DayAddFormProps {
+    CloseForms: Function;
 };
 
 const FormBox = styled.form`
@@ -51,15 +55,16 @@ const InputBox = styled.input`
     padding: 2px 3px;
 `;
 
-const SubmitBtn = styled.div`
+const SubmitBtn = styled.button`
     width: 100px;
-    height: 20px;
+    height: 25px;
     margin-top: 10px;
     border: 2px solid black;
     border-radius: 15px;
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
     font-size: 14px;
     font-weight: bold;
     background-color: darkgray;
@@ -69,11 +74,10 @@ const SubmitBtn = styled.div`
     }
 `;
 
-export default function DayAddForm(){
+export default function DayAddForm({CloseForms}: I_DayAddFormProps){
     const {register, handleSubmit} = useForm();
 
     const Categories = useStore(CategoryStore).SelectedList();
-    const {setDayEdits} = useStore(FormTypeStore);
     const {DayCounts, AddNewDayCount} = useStore(DayCountStore);
 
     const TodayDate = GetNowDate().join("-");
@@ -88,13 +92,13 @@ export default function DayAddForm(){
             Category: FormData.Category
         };
         AddNewDayCount(NewDayCount);
-        setDayEdits();
+        CloseForms();
     };
 
     return (
         <InputLayout>
             <FormBox onSubmit={handleSubmit(onValid)}>
-                <FormDataBox key="CategoryBox">
+                <FormDataBox>
                     <InputTitle>카테고리 선택</InputTitle>
                     <SelectBox {...register("Category")}>
                         {
@@ -108,7 +112,7 @@ export default function DayAddForm(){
                         }
                     </SelectBox>
                 </FormDataBox>
-                <FormDataBox key="TargetDtBox">
+                <FormDataBox>
                     <InputTitle>목표일 / 기준일 *</InputTitle>
                     <InputBox
                         type="date" 
@@ -116,7 +120,7 @@ export default function DayAddForm(){
                         {...register("TargetDt", {required: "날짜를 지정해주세요."})}
                     />
                 </FormDataBox>
-                <FormDataBox key="TitleBox">
+                <FormDataBox>
                     <InputTitle>D-Day 이름 *</InputTitle>
                     <InputBox
                         type="text"

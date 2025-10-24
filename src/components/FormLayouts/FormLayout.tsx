@@ -22,7 +22,8 @@ const FormsWrapper = styled.div`
 `;
 
 const Container = styled.div`
-    width: 380px;
+    width: 90%;
+    max-width: 380px;
     height: 550px;
     background-color: ${(props) => props.theme.FormBgColor};
     border: 2px solid ${(props) => props.theme.FormBgColor};
