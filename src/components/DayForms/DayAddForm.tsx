@@ -4,7 +4,8 @@ import { useForm } from "react-hook-form";
 import { useStore } from "zustand";
 import { CategoryStore, DayCountStore} from "../../stores";
 import { GetNowDate } from "../../modules/GetDateInfos";
-import { I_DayCountTypes } from "../../Project-types";
+import { I_Category, I_DayCountTypes } from "../../Project-types";
+import { useState } from "react";
 
 interface I_DayCountForms {
     Category?: string;
@@ -76,8 +77,9 @@ const SubmitBtn = styled.button`
 
 export default function DayAddForm({CloseForms}: I_DayAddFormProps){
     const {register, handleSubmit} = useForm();
+    const {NowCategory, SelectedList} = useStore(CategoryStore);
+    const Categories = SelectedList();
 
-    const Categories = useStore(CategoryStore).SelectedList();
     const {DayCounts, AddNewDayCount} = useStore(DayCountStore);
 
     const TodayDate = GetNowDate().join("-");
@@ -100,7 +102,7 @@ export default function DayAddForm({CloseForms}: I_DayAddFormProps){
             <FormBox onSubmit={handleSubmit(onValid)}>
                 <FormDataBox>
                     <InputTitle>카테고리 선택</InputTitle>
-                    <SelectBox {...register("Category")}>
+                    <SelectBox {...register("Category")} defaultValue={NowCategory}>
                         {
                             Categories.map((data) => {
                                 return (

@@ -116,7 +116,7 @@ interface I_DayCountStore {
 };
 
 export const DayCountStore = create<I_DayCountStore>()(
-    persist((set, get) => ({
+    persist((set) => ({
         DayCounts: [],
         AddNewDayCount: (newValue) => set((state) => ({DayCounts: [...state.DayCounts, newValue]})),
         DeleteDayCount: (targetId) => set((state) => {
@@ -182,7 +182,14 @@ interface I_ThemeStore {
     setDark: () => void;
 };
 
-export const ThemeStore = create<I_ThemeStore>((set) => ({
-    isDark: false,
-    setDark: () => set((s) => ({isDark: !(s.isDark)}))
-}))
+export const ThemeStore = create<I_ThemeStore>()(
+    persist((set) => ({
+        isDark: false,
+        setDark: () => set((s) => ({isDark: !s.isDark}))
+    }), {
+        name: "D-DayCounter_ThemeStorage",
+        partialize: (state) => ({
+            isDark: state.isDark
+        })
+    })
+);
