@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/D-Day_Counter/static/css/main.90f6920e.css",
-    "main.js": "/D-Day_Counter/static/js/main.0c37b947.js",
+    "main.js": "/D-Day_Counter/static/js/main.5baba1f4.js",
     "index.html": "/D-Day_Counter/index.html",
     "main.90f6920e.css.map": "/D-Day_Counter/static/css/main.90f6920e.css.map",
-    "main.0c37b947.js.map": "/D-Day_Counter/static/js/main.0c37b947.js.map"
+    "main.5baba1f4.js.map": "/D-Day_Counter/static/js/main.5baba1f4.js.map"
   },
   "entrypoints": [
     "static/css/main.90f6920e.css",
-    "static/js/main.0c37b947.js"
+    "static/js/main.5baba1f4.js"
   ]
 }
