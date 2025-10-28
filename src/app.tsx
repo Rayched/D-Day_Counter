@@ -16,6 +16,7 @@ const Wrapper = styled.div`
     width: 100dvw;
     height: 100dvh;
     background-color: ${(props) => props.theme.bgColor};
+    font-family: "Noto-Sans", "Noto-Sans-KR";
 `;
 
 const Headers = styled.header`

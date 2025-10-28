@@ -13,6 +13,10 @@ export interface I_DayCountEditForms {
     NewTargetDt?: string;
 };
 
+interface I_DayEditFormProps {
+    CloseForms: Function;
+};
+
 const LoadingBox = styled.div`
     width: 100%;
     height: 80%;
@@ -93,7 +97,7 @@ const SubmitBtn = styled.button`
     }
 `;
 
-export default function DayEditForm(){
+export default function DayEditForm({CloseForms}: I_DayEditFormProps){
     const {register, handleSubmit} = useForm();
    
     const [Targets, setTargets] = useState<I_DayCountTypes>();
@@ -123,12 +127,15 @@ export default function DayEditForm(){
         };
         UpdateDayCount(NewDayCountData);
         setDayEdits();
+        alert("D-Day 수정 완료");
+        CloseForms();
     };
 
     return (
         <InputLayout>
-            { DayCounts.length === 0 ? ( <LoadingBox>수정 가능한 D-Day가 없습니다.</LoadingBox>) : null}
-             { DayCounts.length >= 0 && Targets === undefined ? (
+            {DayCounts.length === 0 ? ( <LoadingBox>수정 가능한 D-Day가 없습니다.</LoadingBox>) : null}
+            { 
+                DayCounts.length > 0 && Targets === undefined ? (
                     <EditFormBox onSubmit={handleSubmit(TargetSelected)}>
                         <InputTitle>수정할 D-Day 선택</InputTitle>
                             <TargetSelectBox>

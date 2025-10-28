@@ -58,7 +58,7 @@ export default function DayFormBox({setStateFn}: I_DayFormBoxProps){
     
     const DayCountBtns: BtnData[] = [
         {BtnId: "AddBtn", BtnNm: "D-Day 추가"},
-        {BtnId: "DelBtn", BtnNm: "D-Day 수정"}
+        {BtnId: "EditBtn", BtnNm: "D-Day 수정"}
     ];
 
     return (
@@ -89,7 +89,7 @@ export default function DayFormBox({setStateFn}: I_DayFormBoxProps){
             <DayInputBox>
                 <AnimatePresence mode="wait">
                     {NowModes === "AddBtn" ? <DayAddForm CloseForms={setStateFn} /> : null}
-                    {NowModes === "DelBtn" ? <DayEditForm /> : null}
+                    {NowModes === "EditBtn" ? <DayEditForm CloseForms={setStateFn}/> : null}
                 </AnimatePresence>
             </DayInputBox>
         </FormLayout>
